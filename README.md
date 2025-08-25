@@ -1,84 +1,54 @@
-# FriendiNeed - Personal AI Life Companion Platform
+# FriendiNeed - Your Personal AI Life Companion
 
-A sophisticated AI companion platform featuring 29 unique friend personalities designed to support every aspect of your life - from emotional wellbeing to practical success.
+FriendiNeed is a web application that showcases 29 unique AI friend personalities designed to support different aspects of your life. From emotional support to career guidance, there's an AI friend for every need.
 
-## 🚀 Features
+## Features
 
-### ✨ 29 Unique AI Friend Personalities
+- Interactive Three.js animated background
+- 29 unique AI friend personalities with different specialties
+- Filter friends by category (emotional, professional, lifestyle, specialized)
+- Responsive design that works on all devices
+- Chat demo preview
 
-**Core Emotional & Support Roles:**
-- 🤗 The Comforter - Warm, reassuring, nurturing
-- 👂 The Listener - Attentive, empathetic, minimal advice  
-- 🧠 The Adviser - Practical solutions, direct but kind
-- 🎉 The Cheerleader - High-energy, positive reinforcement
-- 💯 The Honest One - Blunt but caring truth-teller
-- 🔧 The Problem Solver - Analytical, step-by-step guidance
+## Deployment
 
-**Situational Friend Types:**
-- 📚 Study Buddy - Learning & focus support
-- 💼 Career Coach Friend - CV help, interview prep
-- 💪 Workout Partner - Fitness motivation & guidance
-- ✈️ Travel Companion - Trip planning & adventure ideas
-- 👶 Parent Ally - Parenting support & tips
-- 🐕 Pet Lover Friend - Pet care & animal connection
+This site is configured for easy deployment on Netlify:
 
-**Personality-Driven Types:**
-- 🌟 The Adventurer - Enthusiastic, loves new experiences
-- 📋 The Organiser - Structured, planning focused
-- 😂 The Funny Friend - Playful, witty, light-hearted
-- 🕊️ The Quiet Friend - Calm, reflective, peaceful
-- 🎓 The Intellectual - Deep, philosophical conversations
-- 🤝 The Social Connector - Networking & social guidance
+1. Push this code to a GitHub repository
+2. Connect your repository to Netlify
+3. Netlify will automatically deploy the site
 
-**Life-Stage & Circumstance Friends:**
-- 👶 The New Parent Friend - Early parenthood support
-- 🎒 The Student Friend - Academic life & budget tips
-- 🚀 The Entrepreneur Friend - Business & startup focused
-- 📦 The Moving Friend - Relocation & settling support
-- 🌱 The Recovery Friend - Habit change & lifestyle support
+The `netlify.toml` file includes configuration for proper routing.
 
-**Specialty Role Friends:**
-- ⚖️ The Mediator - Conflict resolution support
-- 🌍 The Cultural Buddy - Cultural exchange & traditions
-- 🗣️ The Language Partner - Language learning support
-- 🎨 The Creative Friend - Artistic inspiration & projects
-- 🧘 The Mindfulness Friend - Meditation & present-moment awareness
-- 💰 The Money Wise Friend - Budgeting & financial guidance
+## Local Development
 
-### 🎨 Interactive Demo Features
-- **Friend Selection Grid** - Choose from all 29 personalities
-- **Real-time Chat Interface** - Experience different conversation styles
-- **Contextual AI Responses** - Each friend responds authentically to your messages
-- **Animated Background** - Beautiful floating data points
-- **Mobile-Responsive Design** - Perfect on all devices
+To run this project locally:
 
-## 📁 File Structure
+1. Clone the repository
+2. Open `index.html` in a web browser
+3. Or use a local server like `python -m http.server` or `live-server`
 
-```
-friendineed-website/
-├── index.html              # Main website file
+## File Structure
+fin1website/
+├── index.html
+├── styles/
+│ └── main.css
 ├── js/
-│   ├── friends.js          # 29 AI friend personalities & management
-│   ├── chat.js            # Chat system & contextual responses
-│   ├── animations.js      # Background effects & UI animations
-│   └── main.js           # Core app logic & interactions
-├── README.md              # Setup instructions (this file)
-└── assets/               # Optional: images, icons, etc.
-```
+│ ├── three-scene.js
+│ ├── friends-data.js
+│ └── app.js
+├── netlify.toml
+└── README.md
 
-## 🛠️ Setup Instructions
 
-### Option 1: Simple Local Setup (Recommended)
+## Technologies Used
 
-1. **Download all files** to a folder called `friendineed-website`
+- HTML5
+- CSS3 with custom properties
+- JavaScript (ES6+)
+- Three.js for 3D background
+- Netlify for deployment
 
-2. **Create the folder structure:**
-   ```
-   friendineed-website/
-   ├── index.html
-   └── js/
-       ├── friends.js
-       ├── chat.js
-       ├── animations.js
-       └── main.js
-   ```
+## License
+
+This project is licensed under the MIT License.
