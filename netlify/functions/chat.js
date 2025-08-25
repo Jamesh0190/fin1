@@ -1,11 +1,5 @@
-// netlify/functions/chat.js
-import OpenAI from 'openai';
+// netlify/functions/chat.js - Enhanced with better debugging
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
-// CORS headers
 const headers = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'Content-Type',
@@ -14,8 +8,13 @@ const headers = {
 };
 
 export const handler = async (event, context) => {
+  console.log('🚀 Chat function called');
+  console.log('HTTP Method:', event.httpMethod);
+  console.log('Headers:', event.headers);
+
   // Handle preflight requests
   if (event.httpMethod === 'OPTIONS') {
+    console.log('✅ Handling CORS preflight');
     return {
       statusCode: 200,
       headers,
@@ -24,6 +23,7 @@ export const handler = async (event, context) => {
 
   // Only allow POST requests
   if (event.httpMethod !== 'POST') {
+    console.log('❌ Invalid method:', event.httpMethod);
     return {
       statusCode: 405,
       headers,
@@ -32,10 +32,42 @@ export const handler = async (event, context) => {
   }
 
   try {
+    // Check if API key exists
+    if (!process.env.OPENAI_API_KEY) {
+      console.error('❌ OPENAI_API_KEY not found in environment variables');
+      return {
+        statusCode: 500,
+        headers,
+        body: JSON.stringify({ 
+          error: 'OpenAI API key not configured. Please check environment variables.' 
+        }),
+      };
+    }
+
+    console.log('✅ API key found');
+
     // Parse the request body
-    const { message, friendData } = JSON.parse(event.body);
+    let requestData;
+    try {
+      requestData = JSON.parse(event.body);
+      console.log('📝 Request data:', { 
+        hasMessage: !!requestData.message, 
+        hasFriendData: !!requestData.friendData,
+        friendName: requestData.friendData?.name 
+      });
+    } catch (parseError) {
+      console.error('❌ Error parsing request body:', parseError);
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ error: 'Invalid JSON in request body' }),
+      };
+    }
+
+    const { message, friendData } = requestData;
 
     if (!message || !friendData) {
+      console.error('❌ Missing required data:', { hasMessage: !!message, hasFriendData: !!friendData });
       return {
         statusCode: 400,
         headers,
@@ -43,16 +75,46 @@ export const handler = async (event, context) => {
       };
     }
 
-    // Create system message based on friend personality
+    // Import OpenAI (try different import methods)
+    let openai;
+    try {
+      // Try ES6 import first
+      const OpenAI = await import('openai');
+      openai = new OpenAI.default({
+        apiKey: process.env.OPENAI_API_KEY,
+      });
+      console.log('✅ OpenAI initialized with ES6 import');
+    } catch (importError) {
+      console.log('⚠️ ES6 import failed, trying CommonJS');
+      try {
+        // Fallback to CommonJS require
+        const OpenAI = require('openai');
+        openai = new OpenAI({
+          apiKey: process.env.OPENAI_API_KEY,
+        });
+        console.log('✅ OpenAI initialized with CommonJS');
+      } catch (requireError) {
+        console.error('❌ Failed to import OpenAI:', { importError, requireError });
+        return {
+          statusCode: 500,
+          headers,
+          body: JSON.stringify({ error: 'Failed to initialize OpenAI client' }),
+        };
+      }
+    }
+
+    // Create system message
     const systemMessage = `You are ${friendData.name}, an AI friend with these characteristics:
-    
-    Personality Type: ${friendData.type}
-    Description: ${friendData.description}
-    Key Traits: ${friendData.traits.join(', ')}
-    
-    Stay in character as ${friendData.name}. Be helpful, empathetic, and true to your personality. 
-    Keep responses conversational and engaging, typically 1-3 sentences unless more detail is specifically needed.
-    Use a warm, friendly tone that matches your character traits.`;
+
+Personality Type: ${friendData.type}
+Description: ${friendData.description}
+Key Traits: ${friendData.traits ? friendData.traits.join(', ') : 'Helpful, Friendly'}
+
+Stay in character as ${friendData.name}. Be helpful, empathetic, and true to your personality. 
+Keep responses conversational and engaging, typically 1-3 sentences unless more detail is needed.
+Use a warm, friendly tone that matches your character traits.`;
+
+    console.log('🤖 Calling OpenAI API...');
 
     // Call OpenAI API
     const completion = await openai.chat.completions.create({
@@ -67,11 +129,16 @@ export const handler = async (event, context) => {
       frequency_penalty: 0.1,
     });
 
+    console.log('✅ OpenAI API call successful');
+
     const response = completion.choices[0]?.message?.content;
 
     if (!response) {
-      throw new Error('No response generated');
+      console.error('❌ No response content received');
+      throw new Error('No response generated by OpenAI');
     }
+
+    console.log('✅ Response generated successfully');
 
     return {
       statusCode: 200,
@@ -83,23 +150,35 @@ export const handler = async (event, context) => {
     };
 
   } catch (error) {
-    console.error('OpenAI API error:', error);
-    
-    // Return appropriate error message
-    let errorMessage = 'Sorry, I had trouble processing your message. Please try again.';
-    
+    console.error('❌ Error in chat function:', error);
+    console.error('Error stack:', error.stack);
+
+    // Determine error type and message
+    let errorMessage = 'I\'m having trouble connecting right now. Please try again in a moment! 😊';
+    let statusCode = 500;
+
     if (error.code === 'insufficient_quota') {
       errorMessage = 'I\'m temporarily unavailable due to API limits. Please try again later.';
+      console.error('💳 OpenAI quota exceeded');
     } else if (error.code === 'rate_limit_exceeded') {
       errorMessage = 'Too many requests right now. Please wait a moment and try again.';
+      statusCode = 429;
+      console.error('🚫 Rate limit exceeded');
+    } else if (error.message?.includes('API key')) {
+      errorMessage = 'There\'s a configuration issue. Please contact support.';
+      console.error('🔑 API key issue');
+    } else if (error.message?.includes('network') || error.message?.includes('fetch')) {
+      errorMessage = 'Network connection issue. Please check your internet and try again.';
+      console.error('🌐 Network error');
     }
 
     return {
-      statusCode: 500,
+      statusCode: statusCode,
       headers,
       body: JSON.stringify({ 
         error: errorMessage,
-        details: process.env.NODE_ENV === 'development' ? error.message : undefined
+        details: process.env.NODE_ENV === 'development' ? error.message : 'Check function logs for details',
+        timestamp: new Date().toISOString()
       }),
     };
   }
