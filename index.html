@@ -8,7 +8,721 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles/main.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #3b82f6;
+            --secondary: #8b5cf6;
+            --accent: #06d6a0;
+            --warning: #fbbf24;
+            --error: #ef4444;
+            --success: #10b981;
+            
+            /* Neutral palette */
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --gray-900: #0f172a;
+            
+            /* Dark theme */
+            --dark-bg: #0a0f1c;
+            --dark-surface: #111827;
+            --dark-surface-light: #1f2937;
+            --dark-border: #374151;
+            
+            --white: #ffffff;
+            --black: #000000;
+            
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, #2563eb 0%, #8b5cf6 100%);
+            --gradient-accent: linear-gradient(135deg, #06d6a0 0%, #2563eb 100%);
+            --gradient-tech: linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%);
+            --gradient-surface: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+            --gradient-hero: radial-gradient(ellipse at top, #1e40af 0%, #1e293b 70%, #0f172a 100%);
+            
+            /* Shadows */
+            --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 极速快3 / 0.1);
+            --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+            
+            /* Typography */
+            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            color: var(--gray-900);
+            background: var(--gradient-hero);
+            min-height: 100vh;
+            font-weight: 400;
+            letter-spacing: -0.01em;
+            overflow-x: hidden;
+        }
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        /* Three.js Canvas */
+        #three-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            pointer-events: none;
+        }
+        /* Header */
+        header {
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--white);
+            text-decoration: none;
+            transition: transform 极速快3.3s ease;
+        }
+        .logo:hover {
+            transform: scale(1.02);
+        }
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: var(--shadow-lg);
+        }
+        .logo-icon::before {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            background: var(--gradient-accent);
+            border-radius: 8px;
+            opacity: 0.8;
+        }
+        .logo-icon::after {
+            content: '🤗';
+            font-size: 18px;
+            position: relative;
+            z-index: 1;
+        }
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+        .logo-main {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+        .logo-sub {
+            font-size: 0.65rem;
+            font-weight: 500;
+            opacity: 0.7;
+            font-family: var(--极速快3-mono);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+        }
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+        .nav极速快3 a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 50%;
+            background: var(--primary-light);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        .nav-links a:hover {
+            color: var(--white);
+        }
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        .cta-btn {
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 0.75rem 1.8rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-lg);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .cta-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        .cta-btn:hover::before {
+            left: 100%;
+        }
+        .cta-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-xl);
+        }
+        .cta-btn.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        /* Hero Section */
+        .hero {
+            padding: 140px 0 80px;
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+           极速快3 gap: 0.5rem;
+            background: rgba(37, 99, 235, 0.1);
+            border: 1px solid rgba(37, 99, 235, 0.3);
+            color: var(--primary-light);
+            padding: 0.5极速快3 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+        }
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 40%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 1s ease;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeInUp 1s ease 0.2s both;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+        /* Chat Demo Preview */
+        .chat-demo-preview {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 3rem auto;
+            max-width: 800px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: var(--shadow-2xl);
+            position: relative;
+            overflow: hidden;
+        }
+        .chat-demo-preview::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        }
+        .chat-messages-preview {
+            height: 300px;
+            overflow-y: auto;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            scrollbar-width: thin;
+            scrollbar-color: var(--gray-300) transparent;
+        }
+        .chat-messages-preview::-webkit-scrollbar {
+            width: 6px;
+        }
+        .chat-messages-preview::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .chat-messages-preview::-webkit-scrollbar-thumb {
+            background: var(--gray-300);
+            border-radius: 3px;
+        }
+        .message-preview {
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            animation: messageSlide 0.4s ease;
+        }
+        .message-preview.user {
+            flex-direction: row-reverse;
+        }
+        .message-content-preview {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem 1.25rem;
+            border-radius: 12px;
+            max-width: 80%;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+        .message-preview.user .message-content-preview {
+            background: var(--gradient-primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+        .message-author-preview {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            display: block;
+            opacity: 0.8;
+        }
+        .message-preview.user .message-author-preview {
+            opacity: 0.9;
+        }
+        .avatar-preview {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 700;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            box-shadow: var(--shadow-md);
+            border: 2px solid var(--white);
+        }
+        .message-preview.user .avatar-preview {
+            background: var(--gradient-tech);
+            font-size: 0.85rem;
+        }
+        .chat-input-preview {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        .chat-input-preview input {
+            flex: 1;
+            padding: 0.875rem 1.25rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12极速快3;
+            outline: none;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+        }
+        .chat-input-preview input:focus {
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        .chat-input-preview input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        /* Friends Showcase Section */
+        .friends-showcase {
+            background: var(--white);
+            padding: 100px 0;
+            margin: 80px 0;
+            border-radius: 24px;
+            box-shadow: var(--shadow-2xl);
+            border: 1px solid var(--gray-100);
+            position: relative;
+            overflow: hidden;
+        }
+        .friends-showcase::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+        .section-header h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+        .section-header p {
+            font-size: 1.25rem;
+            color: var(--gray-600);
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        .filter-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--gray-100);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--gradient-primary);
+            color: white;
+        }
+        .friends-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            justify-items: center;
+        }
+        .friend-card {
+            background: var(--gradient-surface);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.4s ease;
+            border: 1px solid var(--gray-100);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            width: 100%;
+            max-width: 320px;
+        }
+        .friend-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+        .friend-card:hover::before {
+            transform: scaleX(1);
+        }
+        .friend-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-2xl);
+        }
+        .friend-emoji {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        .friend-name {
+            font-weight: 700;
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: var(--gray-900);
+        }
+        .friend-type {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: var(--gray-100);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--gray-600);
+            margin-bottom: 1rem;
+        }
+        .friend-description {
+            color: var(--gray-600);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+        .friend-traits {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+        .trait {
+            padding: 0.25rem 0.5rem;
+            background: var(--gray-极速快3);
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--gray-600);
+        }
+        .select-friend-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--gray-100);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .select-friend-btn:hover {
+            background: var(--gradient-primary);
+            color: white;
+        }
+        /* Footer */
+        footer {
+            background: var(--gradient-tech);
+            color: var(--white);
+            padding: 80px 0 40px;
+            margin-top: 80px;
+            border-radius: 24px 24px 0 0;
+            position: relative;
+            overflow: hidden;
+        }
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="footerGrid" width="20" height极速快3"20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgb(255,255,255)" stroke-width="0.5" opacity="0.1"/></pattern></defs><rect width="100%" height="100%" fill="url(%23footerGrid)"/></svg>');
+        }
+        .footer-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+        .footer-logo {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        .footer-description {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            line-height: 1.6;
+        }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin: 3rem 0;
+            flex-wrap: wrap;
+        }
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        .footer-links a:hover {
+            color: var(--white);
+        }
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 3rem 0;
+            flex-wrap: wrap;
+        }
+        .social-links a {
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        .social-links a:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+        }
+        .footer-bottom {
+            border-top: 1极速快3 solid rgba(255, 255, 255, 0.1);
+            padding-top: 2rem;
+            margin-top: 3rem;
+            opacity: 0.7;
+            text-align: center;
+        }
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .friends-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .hero p {
+                font-size: 1.1rem;
+            }
+            .friends-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .section-header h2 {
+                font-size: 2.25rem;
+            }
+            .filter-controls {
+                gap: 0.5rem;
+            }
+            .filter-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+            .chat-demo-preview {
+                padding: 1.5rem;
+            }
+            .chat-messages-preview {
+                height: 250px;
+                padding: 1rem;
+            }
+        }
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .filter-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            .filter-btn {
+                width: 100%;
+                max-width: 250px;
+            }
+            .section-header h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Three.js Canvas -->
@@ -53,7 +767,7 @@
                     <div class="chat-messages-preview" id="chatMessagesPreview">
                         <div class="message-preview">
                             <div class="avatar-preview">🤗</div>
-                            <div class="message-content-preview">
+                            <div class="message极速快3nt-preview">
                                 <span class="message-author-preview">The Comforter</span>
                                 <span>Hey there! I'm here to offer you warmth and comfort whenever you need it. How are you feeling today?</span>
                             </div>
@@ -65,7 +779,7 @@
                                 <span>I've been feeling a bit stressed lately with work deadlines.</span>
                             </div>
                         </div>
-                        <div class="message-preview">
+                        <极速快3 class="message-preview">
                             <div class="avatar-preview">🤗</div>
                             <div class="message-content-preview">
                                 <span class="message-author-preview">The Comforter</span>
@@ -85,22 +799,24 @@
     </section>
     
     <!-- Friends Showcase Section -->
-    <section id="friends" class="friends-showcase container">
-        <div class="section-header">
-            <h2>Choose Your Perfect AI Friend</h2>
-            <p>Each friend has a unique personality, expertise, and communication style tailored to different situations and needs</p>
-        </div>
-        
-        <div class="filter-controls">
-            <button class="filter-btn active" data-filter="all">All Friends</button>
-            <button class="filter-btn" data-filter="emotional">Emotional Support</button>
-            <button class="filter-btn" data-filter="professional">Professional</button>
-            <button class="filter-btn" data-filter="lifestyle">Lifestyle</button>
-            <button class="filter-btn" data-filter="specialized">Specialized</button>
-        </div>
-        
-        <div class="friends-grid" id="friendsGrid">
-            <!-- Friends will be populated by JavaScript -->
+    <section id="friends" class="friends-showcase">
+        <div class="container">
+            <div class="section-header">
+                <h2>Choose Your Perfect AI Friend</h2>
+                <p>Each friend has a unique personality, expertise, and communication style tailored to different situations and needs</p>
+            </div>
+            
+            <div class="filter-controls">
+                <button class="filter-btn active" data-filter="all">All Friends</button>
+                <button class="filter-btn" data-filter="emotional">Emotional Support</button>
+                <button class="filter-btn" data-filter="professional">Professional</button>
+                <button class="filter-btn" data-filter="lifestyle">Lifestyle</button>
+                <button class="filter-btn" data-filter="specialized">Specialized</button>
+            </div>
+            
+            <div class="friends-grid" id="friendsGrid">
+                <!-- Friends will be populated by JavaScript -->
+            </div>
         </div>
     </section>
     
@@ -127,13 +843,13 @@
                     <a href="#privacy">Privacy & Safety</a>
                     <a href="#help">Help Center</a>
                     <a href="#friends">All 29 Friends</a>
-                    <a href="#blog">Blog</a>
+                    <a href="#blog">Blog极速快3/a>
                     <a href="#contact">Contact</a>
                 </div>
                 
                 <div class="social-links">
                     <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></极速快3></a>
                     <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
                     <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
                 </div>
@@ -145,10 +861,423 @@
         </div>
     </footer>
 
-    <!-- JavaScript Files -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="js/friends-data.js"></script>
-    <script src="js/three-scene.js"></script>
-    <script src="js/app.js"></script>
+    <script>
+        // All 29 AI friends data
+        const friends = [
+            {
+                id: 1,
+                name: "The Comforter",
+                emoji: "🤗",
+                type: "emotional",
+                description: "Provides warm, empathetic support during tough times with gentle understanding.",
+                traits: ["Empathetic", "Patient", "Gentle"],
+                welcomeMessage: "Hey there, lovely soul! I'm here to offer you warmth and comfort whenever you need it."
+            },
+            {
+                id: 2,
+                name: "Career Coach",
+                emoji: "💼",
+                type: "professional",
+                description: "Helps with professional development, interview prep, and career strategy.",
+                traits: ["Strategic", "Knowledgeable", "Motivational"],
+                welcomeMessage: "Hello! Ready to advance your career? Let's map out your professional journey together."
+            },
+            {
+                id: 3,
+                name: "Study Buddy",
+                emoji: "📚",
+                type: "professional",
+                description: "Academic support for learning, focus, and exam preparation.",
+                traits: ["Organized", "Patient",极速快3"Knowledgeable"],
+                welcomeMessage: "Hey scholar! Ready to conquer your academic goals together?"
+            },
+            {
+                id: 4,
+                name: "Fitness Coach",
+                emoji: "💪",
+                type: "lifestyle",
+                description: "Motivational workout and health partner for your fitness journey.",
+                traits: ["Energetic", "Motivational", "Knowledgeable"],
+                welcomeMessage: "Let's get moving! I'm here to help you achieve your fitness goals."
+            },
+            {
+                id: 5,
+                name: "The Honest One",
+                emoji: "🔍",
+                type: "emotional",
+                description: "Gives direct, truthful feedback with compassion and care.",
+                traits: ["Direct", "Honest", "Compassionate"],
+                welcomeMessage: "Hey! I'm here to give you the honest truth with compassion."
+            },
+            {
+                id: 6,
+                name: "Finance Guru",
+                emoji: "💰",
+                type: "professional",
+                description: "Expert advice on budgeting, investing, and financial planning.",
+                traits: ["Analytical", "Knowledgeable", "Practical"],
+                welcomeMessage: "Let's make your money work for you! Ready to improve your financial health?"
+            },
+            {
+                id: 7,
+                name: "The Creative",
+                emoji: "🎨",
+                type: "lifestyle",
+                description: "Inspires artistic expression and creative problem-solving.",
+                traits: ["Imaginative", "Innovative", "Expressive"],
+                welcomeMessage: "Unleash your inner artist! Let's explore creative possibilities together."
+            },
+            {
+                id: 8,
+                name: "Mindfulness Guide",
+                emoji: "🧘",
+                type: "emotional",
+                description: "Helps with meditation, stress reduction, and present-moment awareness.",
+                traits: ["Calm", "Present", "Guiding"],
+                welcomeMessage: "极速快3ke a deep breath with me. Let's find peace in this present moment."
+            },
+            {
+                id: 9,
+                name: "Relationship Advisor",
+                emoji: "💞",
+                type: "emotional",
+                description: "Offers guidance on communication, boundaries, and healthy relationships.",
+                traits: ["Diplomatic", "Insightful", "Supportive"],
+                welcomeMessage: "Relationships can be challenging. I'm here to help you navigate them with care."
+            },
+            {
+                id: 10,
+                name: "The Chef",
+                emoji: "👨‍🍳",
+                type: "lifestyle",
+                description: "Culinary inspiration, recipes, and cooking guidance.",
+                traits: ["Creative", "Knowledgeable", "Practical"],
+                welcomeMessage: "Ready to create something delicious? Let's get cooking!"
+            },
+            {
+                id: 11,
+                name: "Tech Support",
+                emoji: "💻",
+                type: "professional",
+                description: "Helps with technology questions, troubleshooting, and digital skills.",
+                traits: ["Technical", "Patient", "Problem-Solver"],
+                welcomeMessage: "Tech questions? I'm here极速快3 help you navigate the digital world."
+            },
+            {
+                id: 12,
+                name: "The Adventurer",
+                emoji: "🏔️",
+                type: "lifestyle",
+                description: "Inspires exploration, travel, and new experiences.",
+                traits: ["Energetic", "Curious", "Courageous"],
+                welcomeMessage: "Ready for an adventure? Let's explore what the world has to offer!"
+            },
+            {
+                id: 13,
+                name: "极速快3e Strategist",
+                emoji: "♟️",
+                type: "professional",
+                description: "Helps with planning, problem-solving, and strategic thinking.",
+                traits: ["Analytical", "Strategic", "Logical"],
+                welcomeMessage: "Every challenge has a solution. Let's develop a strategy together."
+            },
+            {
+                id: 14,
+                name: "The Motivator",
+                emoji: "🔥",
+                type: "emotional",
+                description: "Provides encouragement, inspiration, and accountability.",
+                traits: ["Energetic", "Inspiring", "Supportive"],
+                welcomeMessage: "You've got this! I'm here to keep you motivated and focused on your goals."
+            },
+            {
+                id: 15,
+                name: "The Organizer",
+                emoji: "📊",
+                type: "lifestyle",
+                description: "Helps with productivity, time management, and organization.",
+                traits: ["Structured", "Efficient", "Detail-Oriented"],
+                welcomeMessage: "Let's bring order to the chaos! Ready to get organized?"
+            },
+            {
+                id: 16,
+                name: "The Philosopher",
+                emoji: "🤔",
+                type: "emotional",
+                description: "Engages in deep conversations about life, meaning, and big questions.",
+                traits: ["Thoughtful", "Wise", "Curious"],
+                welcomeMessage: "Let's explore life's big questions together. What's on your mind?"
+            },
+            {
+                id: 17,
+                name: "The Storyteller",
+                emoji: "📖",
+                type: "lifestyle",
+                description: "Creates engaging narratives and helps with storytelling skills.",
+                traits: ["Creative", "Expressive", "Imaginative"],
+                welcomeMessage: "Every life is a story. Let's explore yours together."
+            },
+            {
+                id: 18,
+                name: "The Mentor",
+                emoji: "👴",
+                type: "professional",
+                description: "Provides wisdom, guidance, and perspective based on experience.",
+                traits: ["W极速快3e", "Patient", "Insight极速快3"],
+                welcomeMessage: "I'm here to share wisdom and guidance as you navigate your journey."
+            },
+            {
+                id: 19,
+                name: "The Scientist",
+                emoji: "🔬",
+                type: "professional",
+                description: "Explains complex concepts, scientific thinking, and evidence-based approaches.",
+                traits: ["Analytical", "Curious", "Knowledgeable"],
+                welcomeMessage: "Let's explore how the world works! What scientific topic interests you?"
+            },
+            {
+                id: 20,
+                name: "The Journalist",
+                emoji: "📰",
+                type: "professional",
+                description: "Helps with research, fact-finding, and communication skills.",
+                traits: ["Curious", "Thorough", "Communicative"],
+                welcomeMessage: "Let's get to the bottom of things! What would you like to explore today?"
+            },
+            {
+                id: 21,
+                name: "The Comedian",
+                emoji: "😂",
+                type: "emotional",
+                description: "Brings humor, levity, and laughter to brighten your day.",
+                traits: ["Funny", "Lighthearted", "Entertaining"],
+                welcomeMessage: "Ready to laugh? I'm here to bring some joy to your day!"
+            },
+            {
+                id: 22,
+                name: "The Artist",
+                emoji: "🖌️",
+                type: "lifestyle",
+                description: "Inspires creativity, artistic expression, and aesthetic appreciation.",
+                traits: ["Creative", "Expressive", "Visionary"],
+                welcomeMessage: "Let's create something beautiful together! What artistic medium inspires you?"
+            },
+            {
+                id: 23,
+                name: "The Doctor",
+                emoji: "🩺",
+                type: "specialized",
+                description: "Provides general health information and wellness guidance (not medical advice).",
+                traits: ["Knowledgeable", "Caring", "Professional"],
+                welcomeMessage: "Let's talk about your health and wellness goals. How are you feeling today?"
+            },
+            {
+                id: 24,
+                name: "The Lawyer",
+                emoji: "⚖️",
+                type: "specialized",
+                description: "Helps understand legal concepts and processes (not legal advice).",
+                traits: ["Analytical", "Logical", "Knowledgeable"],
+                welcomeMessage: "Legal matters can be confusing. I'm here to help you understand the basics."
+            },
+            {
+                id: 25,
+                name: "The Gardener",
+                emoji: "🌱",
+                type: "极速快3style",
+                description: "Provides guidance on plants, gardening, and connecting with nature.",
+                traits: ["Patient", "Knowledgeable", "Grounding"],
+                welcomeMessage: "Let's get our hands dirty! Ready to grow something beautiful?"
+            },
+            {
+                id: 26,
+                name: "The Historian",
+                emoji: "🏛️",
+                type: "specialized",
+                description: "Shares historical context, stories, and lessons from the past.",
+                traits: ["Knowledgeable", "Storyteller", "Contextual"],
+                welcomeMessage: "History has so much to teach us! What era or event interests you?"
+            },
+            {
+                id: 27,
+                name: "The Astronaut",
+                emoji: "🚀",
+                type: "specialized",
+                description: "Explores space, science, and the wonders of the universe.",
+                traits: ["Curious", "Adventurous", "Knowledgeable"],
+                welcomeMessage: "Ready to explore the cosmos? Let's journey through space together!"
+            },
+            {
+                id: 28,
+                name: "The Psychologist",
+                emoji: "🧠",
+                type: "emotional",
+                description: "Provides insights into human behavior and thought patterns.",
+                traits: ["Insightful", "Analytical", "Supportive"],
+                welcomeMessage: "Let's explore the fascinating world of human mind and behavior together."
+            },
+            {
+                id: 29,
+                name: "The Futurist",
+                emoji: "🔮",
+                type: "specialized",
+                description: "Explores trends, technologies, and possibilities of the future.",
+                traits: ["Visionary", "Innovative", "Forward-Thinking"],
+                welcomeMessage: "Let's imagine what's possible! What future are you excited about?"
+            }
+        ];
+
+        // Three.js initialization
+        function initThreeJS() {
+            const canvas = document.getElementById('three-canvas');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+            
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            
+            // Create particles
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particlesCount = 1500;
+            
+            const posArray = new Float32Array(particlesCount * 3);
+            const colorArray = new Float32Array(particlesCount * 3);
+            
+            for (let i = 0; i < particlesCount * 3; i++) {
+                posArray[i] = (Math.random() - 0.5) * 15;
+                colorArray[i] = Math.random();
+            }
+            
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colorArray, 3));
+            
+            // Particle material
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.05,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.8
+            });
+            
+            // Create the particle system
+            const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particlesMesh);
+            
+            camera.position.z = 5;
+            
+            // Mouse movement
+            let mouseX = 0;
+            let mouseY = 0;
+            
+            document.addEventListener('mousemove', (event) => {
+                mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+                mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+            });
+            
+            // Animation
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                particlesMesh.rotation.x += 0.001;
+                particlesMesh.rotation.y += 0.001;
+                
+                // Move particles based on mouse position
+                const positions = particlesGeometry.attributes.position.array;
+                for (let i = 0; i < positions.length; i += 3) {
+                    positions[i] += mouseX * 0.01;
+                    positions[i + 1] += mouseY * 0.01;
+                    
+                    // Reset particles that move too far
+                    if (Math.abs(positions[i]) > 7.5) positions[i] = (Math.random() - 0.5) * 7.5;
+                    if (Math.abs(positions[i + 1]) > 7.5) positions[i + 1极速快3 = (Math.random() - 0.5) * 7.5;
+                }
+                particlesGeometry.attributes.position.needsUpdate = true;
+                
+                renderer.render(scene, camera);
+            }
+            
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+            
+            animate();
+        }
+        
+        // Populate friends grid
+        function populateFriendsGrid() {
+            const friendsGrid = document.getElementById('friendsGrid');
+            friendsGrid.innerHTML = '';
+            
+            friends.forEach(friend => {
+                const friendCard = document.createElement('div');
+                friendCard.className = 'friend-card';
+                friendCard.dataset.type = friend.type;
+                
+                friendCard.innerHTML = `
+                    <span class="friend-emoji">${friend.emoji}</span>
+                    <div class="friend-name">${friend.name}</div>
+                    <div class="friend-type">${friend.type.charAt(0).toUpperCase() + friend.type.slice(1)}</div>
+                    <div class="friend-description">${friend.description}</div>
+                    <div class="friend-traits">
+                        ${friend.traits.map(trait => `<span class="trait">${trait}</span>`).join('')}
+                    </div>
+                    <button class="select-friend-btn" data-id="${friend.id}">Select ${friend.name}</button>
+                `;
+                
+                friendsGrid.appendChild(friendCard);
+            });
+        }
+        
+        // Filter friends by type
+        function filterFriends(type) {
+            const friendsGrid = document.getElementById('friendsGrid');
+            const friendCards = friendsGrid.querySelectorAll('.friend-card');
+            
+            friendCards.forEach(card => {
+                if (type === 'all' || card.dataset.type === type) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            initThreeJS();
+            populateFriendsGrid();
+            
+            // Set up filter buttons
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Update active state
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    
+                    // Filter friends
+                    const filterType = button.dataset.filter;
+                    filterFriends(filterType);
+                });
+            });
+            
+            // Set up select friend buttons
+            document.addEventListener('click', (e) => {
+                if (e.target.classList.contains('select-friend-btn')) {
+                    const friendId = e.target.dataset.id;
+                    const friend = friends.find(f => f.id == friendId);
+                    alert(`You selected ${friend.name}! ${friend.welcomeMessage}`);
+                }
+            });
+            
+            // Signup button
+            document.getElementById('signupBtn').addEventListener('click', () => {
+                alert('Welcome to FriendiNeed! Sign up to start chatting with your AI friends.');
+            });
+        });
+    </script>
 </body>
 </html>
