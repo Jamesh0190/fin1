@@ -1,0 +1,24 @@
+{
+  "name": "friendineed",
+  "version": "1.0.0",
+  "description": "AI Friend Companion Website",
+  "main": "index.html",
+  "dependencies": {
+    "openai": "^4.24.0"
+  },
+  "scripts": {
+    "dev": "netlify dev",
+    "build": "echo 'Static site - no build needed'",
+    "deploy": "netlify deploy --prod"
+  },
+  "devDependencies": {
+    "netlify-cli": "^17.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "your-github-repo-url"
+  },
+  "keywords": ["ai", "chat", "friends", "companion"],
+  "author": "Your Name",
+  "license": "MIT"
+}
