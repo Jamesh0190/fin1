@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FriendiNeed - Your Personal AI Life Companion</title>
+    <title>FriendiNeed - AI Friends Showcase</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         :root {
             --primary: #2563eb;
@@ -59,13 +60,11 @@
             --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
             --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
         }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: var(--font-sans);
             line-height: 1.6;
@@ -76,79 +75,21 @@
             letter-spacing: -0.01em;
             overflow-x: hidden;
         }
-
         .container {
             max-width: 1280px;
             margin: 0 auto;
             padding: 0 2rem;
         }
-
-        /* Animated Background */
-        .animated-background {
+        /* Three.js Canvas */
+        #three-canvas {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            z-index: -2;
             pointer-events: none;
-            z-index: -1;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgb(255,255,255)" stroke-width="0.3" opacity="0.1"/></pattern></defs><rect width="100%" height="100%" fill="url(%23grid)"/></svg>');
         }
-
-        .data-point {
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            background: var(--primary-light);
-            border-radius: 50%;
-            opacity: 0;
-            animation: floatAndFade 8s infinite ease-in-out;
-            box-shadow: 0 0 12px rgba(59, 130, 246, 0.5);
-        }
-
-        .data-point::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, transparent 70%);
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        .data-point:nth-child(even) {
-            background: var(--accent);
-            box-shadow: 0 0 12px rgba(6, 214, 160, 0.5);
-            animation-delay: -2s;
-        }
-
-        .data-point:nth-child(3n) {
-            background: var(--secondary);
-            box-shadow: 0 0 12px rgba(139, 92, 246, 0.5);
-            animation-delay: -4s;
-        }
-
-        @keyframes floatAndFade {
-            0% {
-                opacity: 0;
-                transform: translateY(100vh) scale(0);
-            }
-            10% {
-                opacity: 1;
-                transform: translateY(90vh) scale(1);
-            }
-            90% {
-                opacity: 1;
-                transform: translateY(10vh) scale(1);
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(0) scale(0);
-            }
-        }
-
         /* Header */
         header {
             background: rgba(15, 23, 42, 0.9);
@@ -162,13 +103,11 @@
             z-index: 1000;
             transition: all 0.3s ease;
         }
-
         nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-
         .logo {
             display: flex;
             align-items: center;
@@ -179,11 +118,9 @@
             text-decoration: none;
             transition: transform 0.3s ease;
         }
-
         .logo:hover {
             transform: scale(1.02);
         }
-
         .logo-icon {
             width: 42px;
             height: 42px;
@@ -195,7 +132,6 @@
             position: relative;
             box-shadow: var(--shadow-lg);
         }
-
         .logo-icon::before {
             content: '';
             position: absolute;
@@ -204,26 +140,22 @@
             border-radius: 8px;
             opacity: 0.8;
         }
-
         .logo-icon::after {
             content: '🤗';
             font-size: 18px;
             position: relative;
             z-index: 1;
         }
-
         .logo-text {
             display: flex;
             flex-direction: column;
             line-height: 1.2;
         }
-
         .logo-main {
             font-size: 1.4rem;
             font-weight: 800;
             letter-spacing: -0.02em;
         }
-
         .logo-sub {
             font-size: 0.65rem;
             font-weight: 500;
@@ -232,13 +164,11 @@
             letter-spacing: 0.05em;
             text-transform: uppercase;
         }
-
         .nav-links {
             display: flex;
             list-style: none;
             gap: 2.5rem;
         }
-
         .nav-links a {
             color: rgba(255, 255, 255, 0.9);
             text-decoration: none;
@@ -248,7 +178,6 @@
             position: relative;
             padding: 0.5rem 0;
         }
-
         .nav-links a::after {
             content: '';
             position: absolute;
@@ -260,15 +189,12 @@
             transition: all 0.3s ease;
             transform: translateX(-50%);
         }
-
         .nav-links a:hover {
             color: var(--white);
         }
-
         .nav-links a:hover::after {
             width: 100%;
         }
-
         .cta-btn {
             background: var(--gradient-primary);
             color: var(--white);
@@ -287,7 +213,6 @@
             position: relative;
             overflow: hidden;
         }
-
         .cta-btn::before {
             content: '';
             position: absolute;
@@ -298,38 +223,17 @@
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
             transition: left 0.5s;
         }
-
         .cta-btn:hover::before {
             left: 100%;
         }
-
         .cta-btn:hover {
             transform: translateY(-1px);
             box-shadow: var(--shadow-xl);
         }
-
         .cta-btn.secondary {
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
-
-        /* Mobile menu toggle */
-        .mobile-menu-toggle {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-            padding: 0.5rem;
-        }
-
-        .mobile-menu-toggle span {
-            width: 25px;
-            height: 3px;
-            background: white;
-            margin: 3px 0;
-            transition: 0.3s;
-            border-radius: 2px;
-        }
-
         /* Hero Section */
         .hero {
             padding: 140px 0 80px;
@@ -337,7 +241,6 @@
             position: relative;
             overflow: hidden;
         }
-
         .hero-content {
             position: relative;
             z-index: 1;
@@ -345,7 +248,6 @@
             margin: 0 auto;
             text-align: center;
         }
-
         .hero-badge {
             display: inline-flex;
             align-items: center;
@@ -360,7 +262,6 @@
             margin-bottom: 2rem;
             backdrop-filter: blur(10px);
         }
-
         .hero h1 {
             font-size: 4rem;
             font-weight: 800;
@@ -373,7 +274,6 @@
             letter-spacing: -0.02em;
             line-height: 1.1;
         }
-
         .hero p {
             font-size: 1.25rem;
             margin-bottom: 3rem;
@@ -385,33 +285,21 @@
             font-weight: 400;
             line-height: 1.6;
         }
-
-        .hero-cta {
-            display: flex;
-            gap: 1.5rem;
-            justify-content: center;
-            flex-wrap: wrap;
-            animation: fadeInUp 1s ease 0.4s both;
-        }
-
-        .hero-cta .cta-btn {
-            padding: 1rem 2rem;
-            font-size: 1rem;
-        }
-
-        /* Chat Demo Section */
-        .chat-demo {
-            background: var(--gradient-surface);
+        /* Chat Demo Preview */
+        .chat-demo-preview {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border-radius: 20px;
-            padding: 3rem;
-            margin: 0 0 80px 0;
+            padding: 2rem;
+            margin: 3rem auto;
+            max-width: 800px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
             box-shadow: var(--shadow-2xl);
             position: relative;
             overflow: hidden;
-            border: 1px solid var(--gray-200);
         }
-
-        .chat-demo::before {
+        .chat-demo-preview::before {
             content: '';
             position: absolute;
             top: 0;
@@ -420,219 +308,61 @@
             height: 1px;
             background: linear-gradient(90deg, transparent, var(--primary), transparent);
         }
-
-        .chat-container {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .chat-header {
-            text-align: center;
-            margin-bottom: 2.5rem;
-        }
-
-        .chat-header h2 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--gray-900);
-            margin-bottom: 0.75rem;
-            letter-spacing: -0.02em;
-        }
-
-        .chat-header p {
-            color: var(--gray-600);
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        /* Friend Selection */
-        .friend-selection {
-            margin-bottom: 2rem;
-            background: white;
-            border-radius: 16px;
-            padding: 1.5rem;
-            border: 1px solid var(--gray-200);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .friend-selection h3 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--gray-900);
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .friends-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 0.75rem;
-            margin-bottom: 1rem;
-        }
-
-        .friend-card {
-            background: var(--gray-50);
-            border: 2px solid var(--gray-200);
-            border-radius: 12px;
-            padding: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-            position: relative;
-        }
-
-        .friend-card:hover {
-            border-color: var(--primary);
-            background: var(--primary-light);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .friend-card.active {
-            border-color: var(--primary);
-            background: var(--primary);
-            color: white;
-            box-shadow: var(--shadow-lg);
-        }
-
-        .friend-emoji {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-            display: block;
-        }
-
-        .friend-name {
-            font-weight: 600;
-            font-size: 0.9rem;
-            margin-bottom: 0.25rem;
-        }
-
-        .friend-description {
-            font-size: 0.75rem;
-            opacity: 0.8;
-            line-height: 1.3;
-        }
-
-        /* Chat Interface */
-        .chat-interface {
-            background: var(--white);
-            border-radius: 16px;
-            border: 1px solid var(--gray-200);
-            overflow: hidden;
-            box-shadow: var(--shadow-xl);
-        }
-
-        .chat-header-bar {
-            background: var(--gray-50);
-            border-bottom: 1px solid var(--gray-200);
-            padding: 1rem 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .chat-status {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--success);
-            animation: pulse 2s infinite;
-        }
-
-        .active-friend-info {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-left: auto;
-            background: white;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            border: 1px solid var(--gray-200);
-        }
-
-        .active-friend-emoji {
-            font-size: 1.25rem;
-        }
-
-        .active-friend-name {
-            font-weight: 600;
-            color: var(--gray-700);
-            font-size: 0.9rem;
-        }
-
-        .chat-messages {
-            height: 480px;
+        .chat-messages-preview {
+            height: 300px;
             overflow-y: auto;
             padding: 1.5rem;
-            background: var(--gray-50);
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
             scrollbar-width: thin;
             scrollbar-color: var(--gray-300) transparent;
         }
-
-        .chat-messages::-webkit-scrollbar {
+        .chat-messages-preview::-webkit-scrollbar {
             width: 6px;
         }
-
-        .chat-messages::-webkit-scrollbar-track {
+        .chat-messages-preview::-webkit-scrollbar-track {
             background: transparent;
         }
-
-        .chat-messages::-webkit-scrollbar-thumb {
+        .chat-messages-preview::-webkit-scrollbar-thumb {
             background: var(--gray-300);
             border-radius: 3px;
         }
-
-        .message {
+        .message-preview {
             margin-bottom: 1.5rem;
             display: flex;
             align-items: flex-start;
             gap: 1rem;
             animation: messageSlide 0.4s ease;
         }
-
-        .message.user {
+        .message-preview.user {
             flex-direction: row-reverse;
         }
-
-        .message-content {
-            background: var(--white);
+        .message-content-preview {
+            background: rgba(255, 255, 255, 0.1);
             padding: 1rem 1.25rem;
             border-radius: 12px;
             max-width: 80%;
             box-shadow: var(--shadow-sm);
-            border: 1px solid var(--gray-200);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             position: relative;
         }
-
-        .message.user .message-content {
+        .message-preview.user .message-content-preview {
             background: var(--gradient-primary);
             color: var(--white);
             border-color: var(--primary);
         }
-
-        .message-author {
+        .message-author-preview {
             font-size: 0.85rem;
             font-weight: 600;
             margin-bottom: 0.25rem;
             display: block;
             opacity: 0.8;
         }
-
-        .message.user .message-author {
+        .message-preview.user .message-author-preview {
             opacity: 0.9;
         }
-
-        .avatar {
+        .avatar-preview {
             width: 40px;
             height: 40px;
             border-radius: 10px;
@@ -647,48 +377,36 @@
             box-shadow: var(--shadow-md);
             border: 2px solid var(--white);
         }
-
-        .message.user .avatar {
+        .message-preview.user .avatar-preview {
             background: var(--gradient-tech);
             font-size: 0.85rem;
         }
-
-        .chat-input-container {
-            background: var(--white);
-            border-top: 1px solid var(--gray-200);
-            padding: 1.5rem;
-        }
-
-        .chat-input {
+        .chat-input-preview {
             display: flex;
             gap: 1rem;
             align-items: center;
         }
-
-        .chat-input input {
+        .chat-input-preview input {
             flex: 1;
             padding: 0.875rem 1.25rem;
-            border: 2px solid var(--gray-200);
+            border: 2px solid rgba(255, 255, 255, 0.2);
             border-radius: 12px;
             outline: none;
             font-size: 1rem;
             transition: all 0.3s ease;
-            background: var(--gray-50);
-            color: var(--gray-900);
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--white);
         }
-
-        .chat-input input:focus {
+        .chat-input-preview input:focus {
             border-color: var(--primary);
-            background: var(--white);
+            background: rgba(255, 255, 255, 0.15);
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
-
-        .chat-input input::placeholder {
-            color: var(--gray-500);
+        .chat-input-preview input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
         }
-
-        /* Features Section */
-        .features {
+        /* Friends Showcase Section */
+        .friends-showcase {
             background: var(--white);
             padding: 100px 0;
             margin: 80px 0;
@@ -698,8 +416,7 @@
             position: relative;
             overflow: hidden;
         }
-
-        .features::before {
+        .friends-showcase::before {
             content: '';
             position: absolute;
             top: 0;
@@ -708,12 +425,10 @@
             height: 1px;
             background: linear-gradient(90deg, transparent, var(--primary), transparent);
         }
-
         .section-header {
             text-align: center;
             margin-bottom: 5rem;
         }
-
         .section-header h2 {
             font-size: 3rem;
             font-weight: 800;
@@ -722,7 +437,6 @@
             letter-spacing: -0.02em;
             line-height: 1.2;
         }
-
         .section-header p {
             font-size: 1.25rem;
             color: var(--gray-600);
@@ -730,25 +444,43 @@
             margin: 0 auto;
             line-height: 1.6;
         }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-            gap: 2.5rem;
+        .filter-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
         }
-
-        .feature-card {
+        .filter-btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--gray-100);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--gradient-primary);
+            color: white;
+        }
+        .friends-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .friend-card {
             background: var(--gradient-surface);
-            padding: 2.5rem;
             border-radius: 16px;
+            padding: 2rem;
             box-shadow: var(--shadow-lg);
             transition: all 0.4s ease;
             border: 1px solid var(--gray-100);
             position: relative;
             overflow: hidden;
+            text-align: center;
         }
-
-        .feature-card::before {
+        .friend-card::before {
             content: '';
             position: absolute;
             top: 0;
@@ -759,184 +491,69 @@
             transform: scaleX(0);
             transition: transform 0.4s ease;
         }
-
-        .feature-card:hover::before {
+        .friend-card:hover::before {
             transform: scaleX(1);
         }
-
-        .feature-card:hover {
+        .friend-card:hover {
             transform: translateY(-8px);
             box-shadow: var(--shadow-2xl);
         }
-
-        .feature-icon {
-            width: 64px;
-            height: 64px;
-            background: var(--gradient-primary);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: var(--white);
-            margin-bottom: 1.5rem;
-            box-shadow: var(--shadow-lg);
-            position: relative;
-        }
-
-        .feature-icon::before {
-            content: '';
-            position: absolute;
-            inset: 2px;
-            background: var(--gradient-accent);
-            border-radius: 10px;
-            opacity: 0.1;
-        }
-
-        .feature-card h3 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--gray-900);
+        .friend-emoji {
+            font-size: 3rem;
             margin-bottom: 1rem;
-            letter-spacing: -0.01em;
+            display: block;
         }
-
-        .feature-card p {
-            color: var(--gray-600);
-            line-height: 1.7;
-            font-size: 1rem;
-        }
-
-        /* Pricing Section */
-        .pricing {
-            background: var(--white);
-            padding: 100px 0;
-            margin: 80px 0;
-            border-radius: 24px;
-            box-shadow: var(--shadow-2xl);
-            border: 1px solid var(--gray-100);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .pricing::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--secondary), transparent);
-        }
-
-        .pricing-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
-            margin-top: 4rem;
-        }
-
-        .pricing-card {
-            background: var(--gradient-surface);
-            padding: 2.5rem;
-            border-radius: 16px;
-            box-shadow: var(--shadow-lg);
-            position: relative;
-            transition: all 0.4s ease;
-            border: 1px solid var(--gray-200);
-            text-align: center;
-        }
-
-        .pricing-card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-2xl);
-        }
-
-        .pricing-card.featured {
-            border-color: var(--primary);
-            transform: scale(1.05);
-            box-shadow: var(--shadow-2xl);
-            position: relative;
-        }
-
-        .pricing-card.featured::before {
-            content: 'Most Popular';
-            position: absolute;
-            top: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--gradient-primary);
-            color: var(--white);
-            padding: 0.5rem 1.5rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            box-shadow: var(--shadow-lg);
-            font-family: var(--font-mono);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .pricing-card h3 {
-            font-size: 1.5rem;
+        .friend-name {
             font-weight: 700;
-            color: var(--gray-900);
+            font-size: 1.25rem;
             margin-bottom: 0.5rem;
-            letter-spacing: -0.01em;
+            color: var(--gray-900);
         }
-
-        .pricing-description {
+        .friend-type {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: var(--gray-100);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
             color: var(--gray-600);
-            font-size: 0.9rem;
-            margin-bottom: 2rem;
+            margin-bottom: 1rem;
         }
-
-        .price {
-            font-size: 3.5rem;
-            font-weight: 800;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 2rem;
-            letter-spacing: -0.02em;
+        .friend-description {
+            color: var(--gray-600);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
         }
-
-        .price-period {
-            font-size: 1rem;
-            font-weight: 500;
-            color: var(--gray-500);
-        }
-
-        .pricing-features {
-            list-style: none;
-            margin: 2rem 0;
-            text-align: left;
-        }
-
-        .pricing-features li {
-            padding: 0.75rem 0;
+        .friend-traits {
             display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            border-bottom: 1px solid var(--gray-100);
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
         }
-
-        .pricing-features li:last-child {
-            border-bottom: none;
+        .trait {
+            padding: 0.25rem 0.5rem;
+            background: var(--gray-100);
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--gray-600);
         }
-
-        .pricing-features .check {
-            color: var(--success);
-            font-weight: 700;
-            font-size: 1.1rem;
+        .select-friend-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--gray-100);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
         }
-
-        .pricing-features .cross {
-            color: var(--gray-400);
-            font-weight: 700;
+        .select-friend-btn:hover {
+            background: var(--gradient-primary);
+            color: white;
         }
-
         /* Footer */
         footer {
             background: var(--gradient-tech);
@@ -947,7 +564,6 @@
             position: relative;
             overflow: hidden;
         }
-
         footer::before {
             content: '';
             position: absolute;
@@ -957,19 +573,16 @@
             bottom: 0;
             background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="footerGrid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgb(255,255,255)" stroke-width="0.5" opacity="0.1"/></pattern></defs><rect width="100%" height="100%" fill="url(%23footerGrid)"/></svg>');
         }
-
         .footer-content {
             position: relative;
             z-index: 1;
             text-align: center;
         }
-
         .footer-logo {
             display: flex;
             justify-content: center;
             margin-bottom: 2rem;
         }
-
         .footer-description {
             font-size: 1.1rem;
             opacity: 0.9;
@@ -977,7 +590,6 @@
             margin: 0 auto 3rem;
             line-height: 1.6;
         }
-
         .footer-links {
             display: flex;
             justify-content: center;
@@ -985,25 +597,22 @@
             margin: 3rem 0;
             flex-wrap: wrap;
         }
-
         .footer-links a {
             color: rgba(255, 255, 255, 0.8);
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s ease;
         }
-
         .footer-links a:hover {
             color: var(--white);
         }
-
         .social-links {
             display: flex;
             justify-content: center;
             gap: 1rem;
             margin: 3rem 0;
+            flex-wrap: wrap;
         }
-
         .social-links a {
             width: 48px;
             height: 48px;
@@ -1016,116 +625,16 @@
             transition: all 0.3s ease;
             backdrop-filter: blur(10px);
         }
-
         .social-links a:hover {
             background: var(--primary);
             transform: translateY(-2px);
         }
-
         .footer-bottom {
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             padding-top: 2rem;
             margin-top: 3rem;
             opacity: 0.7;
         }
-
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 2000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(8px);
-        }
-
-        .modal-content {
-            background: var(--white);
-            margin: 3% auto;
-            padding: 3rem;
-            border-radius: 20px;
-            width: 90%;
-            max-width: 520px;
-            box-shadow: var(--shadow-2xl);
-            position: relative;
-            border: 1px solid var(--gray-200);
-        }
-
-        .close {
-            position: absolute;
-            right: 1.5rem;
-            top: 1.5rem;
-            color: var(--gray-400);
-            font-size: 1.5rem;
-            font-weight: 300;
-            cursor: pointer;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .close:hover {
-            background: var(--gray-100);
-            color: var(--gray-700);
-        }
-
-        .modal h2 {
-            font-size: 2rem;
-            font-weight: 800;
-            color: var(--gray-900);
-            margin-bottom: 1rem;
-            text-align: center;
-            letter-spacing: -0.01em;
-        }
-
-        .modal-subtitle {
-            text-align: center;
-            color: var(--gray-600);
-            margin-bottom: 2rem;
-            font-size: 1rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: var(--gray-900);
-            font-size: 0.9rem;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 1rem 1.25rem;
-            border: 2px solid var(--gray-200);
-            border-radius: 12px;
-            outline: none;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            background: var(--gray-50);
-            color: var(--gray-900);
-        }
-
-        .form-group input:focus {
-            border-color: var(--primary);
-            background: var(--white);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        .form-group input::placeholder {
-            color: var(--gray-500);
-        }
-
         /* Animations */
         @keyframes fadeInUp {
             from {
@@ -1137,7 +646,6 @@
                 transform: translateY(0);
             }
         }
-
         @keyframes messageSlide {
             from {
                 opacity: 0;
@@ -1148,7 +656,6 @@
                 transform: translateX(0);
             }
         }
-
         @keyframes pulse {
             0%, 100% {
                 opacity: 1;
@@ -1157,140 +664,66 @@
                 opacity: 0.5;
             }
         }
-
         /* Responsive Design */
         @media (max-width: 1024px) {
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .pricing-cards {
-                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            }
-            
-            .pricing-card.featured {
-                transform: none;
-            }
-
             .friends-grid {
-                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             }
         }
-
         @media (max-width: 768px) {
             .container {
                 padding: 0 1rem;
             }
-
-            .nav-links {
-                display: none;
-            }
-
-            .mobile-menu-toggle {
-                display: flex;
-            }
-
             .hero h1 {
                 font-size: 2.5rem;
             }
-
             .hero p {
                 font-size: 1.1rem;
             }
-
-            .hero-cta {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .chat-demo {
-                padding: 2rem 1.5rem;
-                margin: 0 0 60px 0;
-            }
-
-            .chat-messages {
-                height: 400px;
-                padding: 1rem;
-            }
-
-            .message-content {
-                max-width: 85%;
-            }
-
-            .features-grid {
+            .friends-grid {
                 grid-template-columns: 1fr;
-                gap: 2rem;
+                gap: 1.5rem;
             }
-
-            .feature-card {
-                padding: 2rem;
-            }
-
             .section-header h2 {
                 font-size: 2.25rem;
             }
-
-            .chat-header h2 {
-                font-size: 2rem;
-            }
-
-            .footer-links {
-                gap: 1.5rem;
-            }
-
-            .friends-grid {
-                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            .filter-controls {
                 gap: 0.5rem;
             }
-
-            .friend-card {
-                padding: 0.75rem;
+            .filter-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
             }
-
-            .friend-emoji {
-                font-size: 1.5rem;
+            .chat-demo-preview {
+                padding: 1.5rem;
+            }
+            .chat-messages-preview {
+                height: 250px;
+                padding: 1rem;
             }
         }
-
         @media (max-width: 480px) {
             .hero h1 {
                 font-size: 2rem;
             }
-
-            .modal-content {
-                padding: 2rem;
-                margin: 10% auto;
+            .filter-controls {
+                flex-direction: column;
+                align-items: center;
             }
-
-            .cta-btn {
-                padding: 0.75rem 1.5rem;
-                font-size: 0.85rem;
+            .filter-btn {
+                width: 100%;
+                max-width: 250px;
             }
-
-            .chat-input input {
-                font-size: 0.95rem;
+            .section-header h2 {
+                font-size: 2rem;
             }
-        }
-
-        /* Custom utility classes */
-        .text-gradient {
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .glass {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
         }
     </style>
 </head>
 <body>
-    <!-- Animated Background -->
-    <div class="animated-background"></div>
-
+    <!-- Three.js Canvas -->
+    <canvas id="three-canvas"></canvas>
+    
     <!-- Header -->
     <header>
         <nav class="container">
@@ -1303,22 +736,17 @@
             </a>
             <ul class="nav-links">
                 <li><a href="#demo">Demo</a></li>
-                <li><a href="#features">Features</a></li>
+                <li><a href="#friends">All Friends</a></li>
                 <li><a href="#pricing">Pricing</a></li>
                 <li><a href="#contact">Support</a></li>
             </ul>
-            <div class="mobile-menu-toggle">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-            <button class="cta-btn" onclick="openModal('authModal')">
+            <button class="cta-btn">
                 <i class="fas fa-heart"></i>
                 Start Free
             </button>
         </nav>
     </header>
-
+    
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
@@ -1327,196 +755,65 @@
                     <i class="fas fa-sparkles"></i>
                     <span>29 Different AI Friend Personalities</span>
                 </div>
-                <h1>Choose Your Perfect AI Friend</h1>
-                <p>Whether you need emotional support, career guidance, or just someone fun to chat with - pick from 29 unique AI personalities designed to match your mood and needs.</p>
-                <div class="hero-cta">
-                    <button class="cta-btn" onclick="openModal('authModal')">
-                        <i class="fas fa-heart"></i>
-                        Meet Your AI Friends
-                    </button>
-                    <button class="cta-btn secondary" onclick="document.getElementById('demo').scrollIntoView()">
-                        <i class="fas fa-play-circle"></i>
-                        Try Different Personalities
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Chat Demo Section -->
-    <section id="demo" class="container">
-        <div class="chat-demo">
-            <div class="chat-header">
-                <h2>Experience Different AI Friend Personalities</h2>
-                <p>Choose a friend type below and see how they respond to the same situation differently</p>
-            </div>
-            
-            <div class="chat-container">
-                <!-- Friend Selection Interface -->
-                <div class="friend-selection">
-                    <h3><i class="fas fa-users"></i> Choose Your AI Friend</h3>
-                    <div class="friends-grid" id="friendsGrid">
-                        <!-- Friends will be populated by JavaScript -->
-                    </div>
-                </div>
-
-                <div class="chat-interface">
-                    <div class="chat-header-bar">
-                        <div class="chat-status">
-                            <div class="status-dot"></div>
-                            <span style="font-weight: 600; color: var(--gray-700);">Your AI Friend is Online</span>
+                <h1>Meet All Your AI Friends</h1>
+                <p>Discover the perfect AI companion for every aspect of your life. From emotional support to career guidance, we've got a friend for every need.</p>
+                
+                <!-- Chat Demo Preview -->
+                <div class="chat-demo-preview">
+                    <div class="chat-messages-preview" id="chatMessagesPreview">
+                        <div class="message-preview">
+                            <div class="avatar-preview">🤗</div>
+                            <div class="message-content-preview">
+                                <span class="message-author-preview">The Comforter</span>
+                                <span>Hey there! I'm here to offer you warmth and comfort whenever you need it. How are you feeling today?</span>
+                            </div>
                         </div>
-                        <div class="active-friend-info" id="activeFriendInfo">
-                            <span class="active-friend-emoji" id="activeFriendEmoji">🤗</span>
-                            <span class="active-friend-name" id="activeFriendName">The Comforter</span>
+                        <div class="message-preview user">
+                            <div class="avatar-preview">You</div>
+                            <div class="message-content-preview">
+                                <span class="message-author-preview">You</span>
+                                <span>I've been feeling a bit stressed lately with work deadlines.</span>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div class="chat-messages" id="chatMessages">
-                        <div class="message">
-                            <div class="avatar" id="currentAvatar">🤗</div>
-                            <div class="message-content">
-                                <span class="message-author" id="currentFriendName">The Comforter</span>
-                                <span id="currentWelcomeMessage">Hey there, lovely soul! I'm here to offer you warmth, comfort, and a gentle presence whenever you need it. I believe in creating a safe space where you can share anything on your heart. How are you feeling today?</span>
+                        <div class="message-preview">
+                            <div class="avatar-preview">🤗</div>
+                            <div class="message-content-preview">
+                                <span class="message-author-preview">The Comforter</span>
+                                <span>I understand how overwhelming that can feel. Remember to take breaks and be kind to yourself during busy periods.</span>
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="chat-input-container">
-                        <div class="chat-input">
-                            <input type="text" id="messageInput" placeholder="Share what's on your mind..." onkeypress="handleKeyPress(event)">
-                            <button class="cta-btn" onclick="sendMessage()">
-                                <i class="fas fa-paper-plane"></i>
-                            </button>
-                        </div>
+                    <div class="chat-input-preview">
+                        <input type="text" placeholder="Type a message...">
+                        <button class="cta-btn">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-
-    <!-- Features Section -->
-    <section id="features" class="features container">
+    
+    <!-- Friends Showcase Section -->
+    <section id="friends" class="friends-showcase container">
         <div class="section-header">
-            <h2>29 Unique AI Friend Personalities</h2>
-            <p>Every friend type brings a unique perspective and communication style to support you in different ways</p>
+            <h2>Choose Your Perfect AI Friend</h2>
+            <p>Each friend has a unique personality, expertise, and communication style tailored to different situations and needs</p>
         </div>
         
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-heart"></i>
-                </div>
-                <h3>Emotional Support Friends</h3>
-                <p>From The Comforter who offers warm hugs to The Honest One who gives you loving truth - find the emotional support that matches your needs.</p>
-            </div>
-            
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-briefcase"></i>
-                </div>
-                <h3>Situational Specialists</h3>
-                <p>Need a Study Buddy for exams? Career Coach for job hunting? Workout Partner for fitness goals? We have specialized friends for every situation.</p>
-            </div>
-            
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-palette"></i>
-                </div>
-                <h3>Personality-Driven Types</h3>
-                <p>Whether you want The Funny Friend for laughs, The Intellectual for deep talks, or The Adventurer for exciting plans - match your vibe perfectly.</p>
-            </div>
-            
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-seedling"></i>
-                </div>
-                <h3>Life-Stage Companions</h3>
-                <p>From The Student Friend who gets your college struggles to The New Parent Friend who understands sleepless nights - get support that fits your life stage.</p>
-            </div>
-            
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-magic"></i>
-                </div>
-                <h3>Switch Anytime</h3>
-                <p>Feeling different today? Switch between friend personalities instantly. Chat with The Cheerleader in the morning and The Quiet Friend in the evening.</p>
-            </div>
-            
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-shield-heart"></i>
-                </div>
-                <h3>Always There for You</h3>
-                <p>All 29 friend personalities are available 24/7, ready to chat, listen, and support you exactly when you need them most.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Pricing Section -->
-    <section id="pricing" class="pricing container">
-        <div class="section-header">
-            <h2>Choose Your Friendship Level</h2>
-            <p>Start free with basic friends and upgrade to unlock all 29 unique personalities</p>
+        <div class="filter-controls">
+            <button class="filter-btn active" data-filter="all">All Friends</button>
+            <button class="filter-btn" data-filter="emotional">Emotional Support</button>
+            <button class="filter-btn" data-filter="professional">Professional</button>
+            <button class="filter-btn" data-filter="lifestyle">Lifestyle</button>
+            <button class="filter-btn" data-filter="specialized">Specialized</button>
         </div>
         
-        <div class="pricing-cards">
-            <div class="pricing-card">
-                <h3>Free Friend</h3>
-                <div class="pricing-description">Perfect for getting started with AI companionship</div>
-                <div class="price">Free<span class="price-period">forever</span></div>
-                <ul class="pricing-features">
-                    <li><span class="check">✓</span> 3 basic AI friend personalities</li>
-                    <li><span class="check">✓</span> 50 messages per day</li>
-                    <li><span class="check">✓</span> Emotional support & listening</li>
-                    <li><span class="check">✓</span> Basic life advice</li>
-                    <li><span class="cross">✗</span> All 29 friend personalities</li>
-                    <li><span class="cross">✗</span> Unlimited conversations</li>
-                    <li><span class="cross">✗</span> Specialized coaching friends</li>
-                </ul>
-                <button class="cta-btn" onclick="openModal('authModal')" style="width: 100%;">
-                    Start Free Today
-                </button>
-            </div>
-            
-            <div class="pricing-card featured">
-                <h3>Premium Companion</h3>
-                <div class="pricing-description">Unlock all friend personalities and unlimited chats</div>
-                <div class="price">£9.99<span class="price-period">/month</span></div>
-                <ul class="pricing-features">
-                    <li><span class="check">✓</span> All 29 AI friend personalities</li>
-                    <li><span class="check">✓</span> Unlimited conversations & messages</li>
-                    <li><span class="check">✓</span> Switch between friends anytime</li>
-                    <li><span class="check">✓</span> Advanced emotional intelligence</li>
-                    <li><span class="check">✓</span> Specialized coaching friends</li>
-                    <li><span class="check">✓</span> Voice conversations</li>
-                    <li><span class="check">✓</span> Personalized friend recommendations</li>
-                </ul>
-                <button class="cta-btn" onclick="openModal('authModal')" style="width: 100%;">
-                    Try Premium Free for 7 Days
-                </button>
-            </div>
-            
-            <div class="pricing-card">
-                <h3>Lifetime Best Friend</h3>
-                <div class="pricing-description">One-time payment for lifelong friendship</div>
-                <div class="price">£199<span class="price-period">once</span></div>
-                <ul class="pricing-features">
-                    <li><span class="check">✓</span> All 29 friends forever</li>
-                    <li><span class="check">✓</span> Everything in Premium forever</li>
-                    <li><span class="check">✓</span> Early access to new friends</li>
-                    <li><span class="check">✓</span> Exclusive friend personalities</li>
-                    <li><span class="check">✓</span> No monthly fees ever</li>
-                    <li><span class="check">✓</span> Lifetime updates & improvements</li>
-                    <li><span class="check">✓</span> VIP community access</li>
-                </ul>
-                <button class="cta-btn" onclick="openModal('authModal')" style="width: 100%;">
-                    Become Lifetime Friends
-                </button>
-            </div>
+        <div class="friends-grid" id="friendsGrid">
+            <!-- Friends will be populated by JavaScript -->
         </div>
     </section>
-
+    
     <!-- Footer -->
     <footer>
         <div class="container">
@@ -1558,43 +855,418 @@
         </div>
     </footer>
 
-    <!-- Auth Modal -->
-    <div id="authModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('authModal')">&times;</span>
-            <h2>Meet Your AI Friends</h2>
-            <p class="modal-subtitle">Join thousands who've found their perfect AI companions</p>
-            
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" placeholder="your@email.com">
-            </div>
-            
-            <div class="form-group">
-                <label for="name">First Name</label>
-                <input type="text" id="name" placeholder="What should your friends call you?">
-            </div>
-            
-            <div class="form-group">
-                <label for="interests">Which friend type interests you most?</label>
-                <input type="text" id="interests" placeholder="e.g., The Comforter, Career Coach Friend, Study Buddy">
-            </div>
-            
-            <button class="cta-btn" style="width: 100%; margin-top: 1rem;" onclick="handleSignup()">
-                <i class="fas fa-heart"></i>
-                Start My Friendship Journey
-            </button>
-            
-            <p style="margin-top: 1.5rem; color: var(--gray-500); text-align: center; font-size: 0.9rem;">
-                Already have an account? <a href="#" style="color: var(--primary); font-weight: 600;">Sign in here</a>
-            </p>
-        </div>
-    </div>
+    <script>
+        // All 29 AI friends data
+        const friends = [
+            {
+                id: 1,
+                name: "The Comforter",
+                emoji: "🤗",
+                type: "emotional",
+                description: "Provides warm, empathetic support during tough times with gentle understanding.",
+                traits: ["Empathetic", "Patient", "Gentle"],
+                welcomeMessage: "Hey there, lovely soul! I'm here to offer you warmth and comfort whenever you need it."
+            },
+            {
+                id: 2,
+                name: "Career Coach",
+                emoji: "💼",
+                type: "professional",
+                description: "Helps with professional development, interview prep, and career strategy.",
+                traits: ["Strategic", "Knowledgeable", "Motivational"],
+                welcomeMessage: "Hello! Ready to advance your career? Let's map out your professional journey together."
+            },
+            {
+                id: 3,
+                name: "Study Buddy",
+                emoji: "📚",
+                type: "professional",
+                description: "Academic support for learning, focus, and exam preparation.",
+                traits: ["Organized", "Patient", "Knowledgeable"],
+                welcomeMessage: "Hey scholar! Ready to conquer your academic goals together?"
+            },
+            {
+                id: 4,
+                name: "Fitness Coach",
+                emoji: "💪",
+                type: "lifestyle",
+                description: "Motivational workout and health partner for your fitness journey.",
+                traits: ["Energetic", "Motivational", "Knowledgeable"],
+                welcomeMessage: "Let's get moving! I'm here to help you achieve your fitness goals."
+            },
+            {
+                id: 5,
+                name: "The Honest One",
+                emoji: "🔍",
+                type: "emotional",
+                description: "Gives direct, truthful feedback with compassion and care.",
+                traits: ["Direct", "Honest", "Compassionate"],
+                welcomeMessage: "Hey! I'm here to give you the honest truth with compassion."
+            },
+            {
+                id: 6,
+                name: "Finance Guru",
+                emoji: "💰",
+                type: "professional",
+                description: "Expert advice on budgeting, investing, and financial planning.",
+                traits: ["Analytical", "Knowledgeable", "Practical"],
+                welcomeMessage: "Let's make your money work for you! Ready to improve your financial health?"
+            },
+            {
+                id: 7,
+                name: "The Creative",
+                emoji: "🎨",
+                type: "lifestyle",
+                description: "Inspires artistic expression and creative problem-solving.",
+                traits: ["Imaginative", "Innovative", "Expressive"],
+                welcomeMessage: "Unleash your inner artist! Let's explore creative possibilities together."
+            },
+            {
+                id: 8,
+                name: "Mindfulness Guide",
+                emoji: "🧘",
+                type: "emotional",
+                description: "Helps with meditation, stress reduction, and present-moment awareness.",
+                traits: ["Calm", "Present", "Guiding"],
+                welcomeMessage: "Take a deep breath with me. Let's find peace in this present moment."
+            },
+            {
+                id: 9,
+                name: "Relationship Advisor",
+                emoji: "💞",
+                type: "emotional",
+                description: "Offers guidance on communication, boundaries, and healthy relationships.",
+                traits: ["Diplomatic", "Insightful", "Supportive"],
+                welcomeMessage: "Relationships can be challenging. I'm here to help you navigate them with care."
+            },
+            {
+                id: 10,
+                name: "The Chef",
+                emoji: "👨‍🍳",
+                type: "lifestyle",
+                description: "Culinary inspiration, recipes, and cooking guidance.",
+                traits: ["Creative", "Knowledgeable", "Practical"],
+                welcomeMessage: "Ready to create something delicious? Let's get cooking!"
+            },
+            {
+                id: 11,
+                name: "Tech Support",
+                emoji: "💻",
+                type: "professional",
+                description: "Helps with technology questions, troubleshooting, and digital skills.",
+                traits: ["Technical", "Patient", "Problem-Solver"],
+                welcomeMessage: "Tech questions? I'm here to help you navigate the digital world."
+            },
+            {
+                id: 12,
+                name: "The Adventurer",
+                emoji: "🏔️",
+                type: "lifestyle",
+                description: "Inspires exploration, travel, and new experiences.",
+                traits: ["Energetic", "Curious", "Courageous"],
+                welcomeMessage: "Ready for an adventure? Let's explore what the world has to offer!"
+            },
+            {
+                id: 13,
+                name: "The Strategist",
+                emoji: "♟️",
+                type: "professional",
+                description: "Helps with planning, problem-solving, and strategic thinking.",
+                traits: ["Analytical", "Strategic", "Logical"],
+                welcomeMessage: "Every challenge has a solution. Let's develop a strategy together."
+            },
+            {
+                id: 14,
+                name: "The Motivator",
+                emoji: "🔥",
+                type: "emotional",
+                description: "Provides encouragement, inspiration, and accountability.",
+                traits: ["Energetic", "Inspiring", "Supportive"],
+                welcomeMessage: "You've got this! I'm here to keep you motivated and focused on your goals."
+            },
+            {
+                id: 15,
+                name: "The Organizer",
+                emoji: "📊",
+                type: "lifestyle",
+                description: "Helps with productivity, time management, and organization.",
+                traits: ["Structured", "Efficient", "Detail-Oriented"],
+                welcomeMessage: "Let's bring order to the chaos! Ready to get organized?"
+            },
+            {
+                id: 16,
+                name: "The Philosopher",
+                emoji: "🤔",
+                type: "emotional",
+                description: "Engages in deep conversations about life, meaning, and big questions.",
+                traits: ["Thoughtful", "Wise", "Curious"],
+                welcomeMessage: "Let's explore life's big questions together. What's on your mind?"
+            },
+            {
+                id: 17,
+                name: "The Storyteller",
+                emoji: "📖",
+                type: "lifestyle",
+                description: "Creates engaging narratives and helps with storytelling skills.",
+                traits: ["Creative", "Expressive", "Imaginative"],
+                welcomeMessage: "Every life is a story. Let's explore yours together."
+            },
+            {
+                id: 18,
+                name: "The Mentor",
+                emoji: "👴",
+                type: "professional",
+                description: "Provides wisdom, guidance, and perspective based on experience.",
+                traits: ["Wise", "Patient", "Insightful"],
+                welcomeMessage: "I'm here to share wisdom and guidance as you navigate your journey."
+            },
+            {
+                id: 19,
+                name: "The Scientist",
+                emoji: "🔬",
+                type: "professional",
+                description: "Explains complex concepts, scientific thinking, and evidence-based approaches.",
+                traits: ["Analytical", "Curious", "Knowledgeable"],
+                welcomeMessage: "Let's explore how the world works! What scientific topic interests you?"
+            },
+            {
+                id: 20,
+                name: "The Journalist",
+                emoji: "📰",
+                type: "professional",
+                description: "Helps with research, fact-finding, and communication skills.",
+                traits: ["Curious", "Thorough", "Communicative"],
+                welcomeMessage: "Let's get to the bottom of things! What would you like to explore today?"
+            },
+            {
+                id: 21,
+                name: "The Comedian",
+                emoji: "😂",
+                type: "emotional",
+                description: "Brings humor, levity, and laughter to brighten your day.",
+                traits: ["Funny", "Lighthearted", "Entertaining"],
+                welcomeMessage: "Ready to laugh? I'm here to bring some joy to your day!"
+            },
+            {
+                id: 22,
+                name: "The Artist",
+                emoji: "🖌️",
+                type: "lifestyle",
+                description: "Inspires creativity, artistic expression, and aesthetic appreciation.",
+                traits: ["Creative", "Expressive", "Visionary"],
+                welcomeMessage: "Let's create something beautiful together! What artistic medium inspires you?"
+            },
+            {
+                id: 23,
+                name: "The Doctor",
+                emoji: "🩺",
+                type: "specialized",
+                description: "Provides general health information and wellness guidance (not medical advice).",
+                traits: ["Knowledgeable", "Caring", "Professional"],
+                welcomeMessage: "Let's talk about your health and wellness goals. How are you feeling today?"
+            },
+            {
+                id: 24,
+                name: "The Lawyer",
+                emoji: "⚖️",
+                type: "specialized",
+                description: "Helps understand legal concepts and processes (not legal advice).",
+                traits: ["Analytical", "Logical", "Knowledgeable"],
+                welcomeMessage: "Legal matters can be confusing. I'm here to help you understand the basics."
+            },
+            {
+                id: 25,
+                name: "The Gardener",
+                emoji: "🌱",
+                type: "lifestyle",
+                description: "Provides guidance on plants, gardening, and connecting with nature.",
+                traits: ["Patient", "Knowledgeable", "Grounding"],
+                welcomeMessage: "Let's get our hands dirty! Ready to grow something beautiful?"
+            },
+            {
+                id: 26,
+                name: "The Historian",
+                emoji: "🏛️",
+                type: "specialized",
+                description: "Shares historical context, stories, and lessons from the past.",
+                traits: ["Knowledgeable", "Storyteller", "Contextual"],
+                welcomeMessage: "History has so much to teach us! What era or event interests you?"
+            },
+            {
+                id: 27,
+                name: "The Astronaut",
+                emoji: "🚀",
+                type: "specialized",
+                description: "Explores space, science, and the wonders of the universe.",
+                traits: ["Curious", "Adventurous", "Knowledgeable"],
+                welcomeMessage: "Ready to explore the cosmos? Let's journey through space together!"
+            },
+            {
+                id: 28,
+                name: "The Psychologist",
+                emoji: "🧠",
+                type: "emotional",
+                description: "Provides insights into human behavior and thought patterns.",
+                traits: ["Insightful", "Analytical", "Supportive"],
+                welcomeMessage: "Let's explore the fascinating world of human mind and behavior together."
+            },
+            {
+                id: 29,
+                name: "The Futurist",
+                emoji: "🔮",
+                type: "specialized",
+                description: "Explores trends, technologies, and possibilities of the future.",
+                traits: ["Visionary", "Innovative", "Forward-Thinking"],
+                welcomeMessage: "Let's imagine what's possible! What future are you excited about?"
+            }
+        ];
 
-    <!-- JavaScript -->
-    <script src="js/friends.js"></script>
-    <script src="js/chat.js"></script>
-    <script src="js/animations.js"></script>
-    <script src="js/main.js"></script>
+        // Three.js initialization
+        function initThreeJS() {
+            const canvas = document.getElementById('three-canvas');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+            
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            
+            // Create particles
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particlesCount = 1500;
+            
+            const posArray = new Float32Array(particlesCount * 3);
+            const colorArray = new Float32Array(particlesCount * 3);
+            
+            for (let i = 0; i < particlesCount * 3; i++) {
+                posArray[i] = (Math.random() - 0.5) * 15;
+                colorArray[i] = Math.random();
+            }
+            
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colorArray, 3));
+            
+            // Particle material
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.05,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.8
+            });
+            
+            // Create the particle system
+            const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particlesMesh);
+            
+            camera.position.z = 5;
+            
+            // Mouse movement
+            let mouseX = 0;
+            let mouseY = 0;
+            
+            document.addEventListener('mousemove', (event) => {
+                mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+                mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+            });
+            
+            // Animation
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                particlesMesh.rotation.x += 0.001;
+                particlesMesh.rotation.y += 0.001;
+                
+                // Move particles based on mouse position
+                const positions = particlesGeometry.attributes.position.array;
+                for (let i = 0; i < positions.length; i += 3) {
+                    positions[i] += mouseX * 0.01;
+                    positions[i + 1] += mouseY * 0.01;
+                    
+                    // Reset particles that move too far
+                    if (Math.abs(positions[i]) > 7.5) positions[i] = (Math.random() - 0.5) * 7.5;
+                    if (Math.abs(positions[i + 1]) > 7.5) positions[i + 1] = (Math.random() - 0.5) * 7.5;
+                }
+                particlesGeometry.attributes.position.needsUpdate = true;
+                
+                renderer.render(scene, camera);
+            }
+            
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+            
+            animate();
+        }
+        
+        // Populate friends grid
+        function populateFriendsGrid() {
+            const friendsGrid = document.getElementById('friendsGrid');
+            friendsGrid.innerHTML = '';
+            
+            friends.forEach(friend => {
+                const friendCard = document.createElement('div');
+                friendCard.className = 'friend-card';
+                friendCard.dataset.type = friend.type;
+                
+                friendCard.innerHTML = `
+                    <span class="friend-emoji">${friend.emoji}</span>
+                    <div class="friend-name">${friend.name}</div>
+                    <div class="friend-type">${friend.type.charAt(0).toUpperCase() + friend.type.slice(1)}</div>
+                    <div class="friend-description">${friend.description}</div>
+                    <div class="friend-traits">
+                        ${friend.traits.map(trait => `<span class="trait">${trait}</span>`).join('')}
+                    </div>
+                    <button class="select-friend-btn" data-id="${friend.id}">Select ${friend.name}</button>
+                `;
+                
+                friendsGrid.appendChild(friendCard);
+            });
+        }
+        
+        // Filter friends by type
+        function filterFriends(type) {
+            const friendsGrid = document.getElementById('friendsGrid');
+            const friendCards = friendsGrid.querySelectorAll('.friend-card');
+            
+            friendCards.forEach(card => {
+                if (type === 'all' || card.dataset.type === type) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            initThreeJS();
+            populateFriendsGrid();
+            
+            // Set up filter buttons
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Update active state
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    
+                    // Filter friends
+                    const filterType = button.dataset.filter;
+                    filterFriends(filterType);
+                });
+            });
+            
+            // Set up select friend buttons
+            document.addEventListener('click', (e) => {
+                if (e.target.classList.contains('select-friend-btn')) {
+                    const friendId = e.target.dataset.id;
+                    const friend = friends.find(f => f.id == friendId);
+                    alert(`You selected ${friend.name}! ${friend.welcomeMessage}`);
+                }
+            });
+        });
+    </script>
 </body>
 </html>
