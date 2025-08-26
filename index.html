@@ -8,78 +8,400 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles/main.css">
     
-    <!-- Enhanced styles for central alignment and chat functionality -->
     <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #3b82f6;
+            --secondary: #8b5cf6;
+            --accent: #06d6a0;
+            --warning: #fbbf24;
+            --error: #ef4444;
+            --success: #10b981;
+            
+            /* Neutral palette */
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --gray-900: #0f172a;
+            
+            /* Dark theme */
+            --dark-bg: #0a0f1c;
+            --dark-surface: #111827;
+            --dark-surface-light: #1f2937;
+            --dark-border: #374151;
+            
+            --white: #ffffff;
+            --black: #000000;
+            
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, #2563eb 0%, #8b5cf6 100%);
+            --gradient-accent: linear-gradient(135deg, #06d6a0 0%, #2563eb 100%);
+            --gradient-tech: linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%);
+            --gradient-surface: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+            --gradient-hero: radial-gradient(ellipse at top, #1e40af 0%, #1e293b 70%, #0f172a 100%);
+            
+            /* Shadows */
+            --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+            
+            /* Typography */
+            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+        }
+
+        * {
             margin: 0;
             padding: 0;
-        }
-        
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
             box-sizing: border-box;
         }
-        
-        header nav {
+
+        body {
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            color: var(--gray-900);
+            background: var(--gradient-hero);
+            min-height: 100vh;
+            font-weight: 400;
+            letter-spacing: -0.01em;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Three.js Canvas */
+        #three-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        /* Header */
+        header {
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            width: 100%;
-        }
-        
-        .hero-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-        
-        .chat-demo-preview {
-            width: 100%;
-            max-width: 600px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 20px;
-            margin-top: 40px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
 
-        .chat-messages-preview {
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--white);
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.02);
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .logo-icon::before {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            background: var(--gradient-accent);
+            border-radius: 8px;
+            opacity: 0.8;
+        }
+
+        .logo-icon::after {
+            content: '🤗';
+            font-size: 18px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .logo-main {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .logo-sub {
+            font-size: 0.65rem;
+            font-weight: 500;
+            opacity: 0.7;
+            font-family: var(--font-mono);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 50%;
+            background: var(--primary-light);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover {
+            color: var(--white);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .cta-btn {
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 0.75rem 1.8rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-lg);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .cta-btn:hover::before {
+            left: 100%;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .cta-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .cta-btn.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 140px 0 80px;
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(37, 99, 235, 0.1);
+            border: 1px solid rgba(37, 99, 235, 0.3);
+            color: var(--primary-light);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 40%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 1s ease;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeInUp 1s ease 0.2s both;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+        /* Chat Interface */
+        .chat-interface {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 3rem auto;
+            max-width: 800px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: var(--shadow-2xl);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chat-interface::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        }
+
+        .chat-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .friend-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: var(--white);
+            border: 3px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .friend-info h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .friend-info p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .chat-messages {
             height: 400px;
             overflow-y: auto;
-            margin-bottom: 20px;
-            padding: 10px 0;
+            margin-bottom: 1.5rem;
             scrollbar-width: thin;
             scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
         }
 
-        .chat-messages-preview::-webkit-scrollbar {
+        .chat-messages::-webkit-scrollbar {
             width: 6px;
         }
 
-        .chat-messages-preview::-webkit-scrollbar-track {
+        .chat-messages::-webkit-scrollbar-track {
             background: rgba(255, 255, 255, 0.1);
             border-radius: 3px;
         }
 
-        .chat-messages-preview::-webkit-scrollbar-thumb {
+        .chat-messages::-webkit-scrollbar-thumb {
             background: rgba(255, 255, 255, 0.3);
             border-radius: 3px;
         }
 
-        .message-preview {
+        .message {
             display: flex;
             gap: 12px;
             margin-bottom: 16px;
@@ -87,11 +409,11 @@
             animation: messageSlideIn 0.3s ease-out;
         }
 
-        .message-preview.user {
+        .message.user {
             flex-direction: row-reverse;
         }
 
-        .avatar-preview {
+        .message-avatar {
             width: 40px;
             height: 40px;
             border-radius: 50%;
@@ -105,12 +427,12 @@
             font-weight: 600;
         }
 
-        .message-preview.user .avatar-preview {
+        .message.user .message-avatar {
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             font-size: 14px;
         }
 
-        .message-content-preview {
+        .message-content {
             background: rgba(255, 255, 255, 0.1);
             border-radius: 18px;
             padding: 12px 16px;
@@ -119,12 +441,12 @@
             position: relative;
         }
 
-        .message-preview.user .message-content-preview {
+        .message.user .message-content {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
         }
 
-        .message-author-preview {
+        .message-author {
             font-weight: 600;
             font-size: 12px;
             opacity: 0.8;
@@ -134,17 +456,36 @@
             letter-spacing: 0.5px;
         }
 
-        .chat-input-preview {
+        .message-text {
+            line-height: 1.5;
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            margin-top: 8px;
+        }
+
+        .typing-indicator span {
+            animation: typing-pulse 1.4s ease-in-out infinite;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+        .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0s; }
+
+        .chat-input {
             display: flex;
             gap: 12px;
-            align-items: center;
+            align-items: flex-end;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 25px;
             padding: 8px;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .chat-input-preview input {
+        .chat-input textarea {
             flex: 1;
             background: transparent;
             border: none;
@@ -152,13 +493,17 @@
             font-size: 16px;
             padding: 12px 16px;
             outline: none;
+            resize: none;
+            font-family: inherit;
+            max-height: 120px;
+            min-height: 44px;
         }
 
-        .chat-input-preview input::placeholder {
+        .chat-input textarea::placeholder {
             color: rgba(255, 255, 255, 0.5);
         }
 
-        .chat-input-preview button {
+        .send-button {
             width: 44px;
             height: 44px;
             border-radius: 50%;
@@ -168,61 +513,225 @@
             justify-content: center;
             font-size: 16px;
             transition: all 0.3s ease;
+            flex-shrink: 0;
         }
 
-        .chat-input-preview button:hover {
+        .send-button:hover {
             transform: scale(1.1);
         }
 
-        .friends-showcase {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        .send-button:disabled {
+            opacity: 0.5;
+            transform: none;
         }
-        
+
+        /* Friends Grid */
+        .friends-section {
+            background: var(--white);
+            margin: 80px auto;
+            border-radius: 24px;
+            box-shadow: var(--shadow-2xl);
+            border: 1px solid var(--gray-100);
+            position: relative;
+            overflow: hidden;
+            max-width: 1200px;
+        }
+
+        .friends-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        }
+
+        .friends-content {
+            padding: 100px 2rem;
+        }
+
         .section-header {
             text-align: center;
-            max-width: 800px;
+            margin-bottom: 3rem;
         }
-        
+
+        .section-header h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        .section-header p {
+            font-size: 1.25rem;
+            color: var(--gray-600);
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
         .filter-controls {
             display: flex;
             justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
             flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 30px;
-        }
-        
-        .friends-grid {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-        
-        .footer-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-        
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin: 20px 0;
-        }
-        
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin: 20px 0;
         }
 
-        /* Enhanced animations */
+        .filter-btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--gray-100);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            color: var(--gray-700);
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .friends-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .friend-card {
+            background: var(--gradient-surface);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.4s ease;
+            border: 1px solid var(--gray-100);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .friend-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .friend-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .friend-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-2xl);
+        }
+
+        .friend-card.active {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+            border: 2px solid rgba(37, 99, 235, 0.5);
+        }
+
+        .friend-card.active::before {
+            transform: scaleX(1);
+            background: linear-gradient(90deg, #2563eb, #8b5cf6);
+        }
+
+        .friend-emoji {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .friend-name {
+            font-weight: 700;
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: var(--gray-900);
+        }
+
+        .friend-type {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: var(--gray-100);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--gray-600);
+            margin-bottom: 1rem;
+            text-transform: capitalize;
+        }
+
+        .friend-description {
+            color: var(--gray-600);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .friend-traits {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .trait {
+            padding: 0.25rem 0.5rem;
+            background: var(--gray-100);
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--gray-600);
+        }
+
+        .quick-starters {
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        .quick-starter {
+            display: inline-block;
+            margin: 0.25rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quick-starter:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         @keyframes messageSlideIn {
             from {
                 opacity: 0;
@@ -234,53 +743,201 @@
             }
         }
 
-        /* Current friend indicator */
-        .friend-card.current-friend {
-            transform: scale(1.02);
-            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
-            border: 2px solid rgba(37, 99, 235, 0.5);
+        @keyframes typing-pulse {
+            0%, 80%, 100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+            40% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
         }
 
-        .friend-card.current-friend::before {
-            transform: scaleX(1);
-            background: linear-gradient(90deg, #2563eb, #8b5cf6);
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
         }
 
-        /* Loading states */
-        .chat-input-preview button.loading {
+        /* Notification System */
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: var(--primary);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            z-index: 10000;
+            max-width: 400px;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            white-space: pre-line;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.error {
+            background: var(--error);
+        }
+
+        .notification.success {
+            background: var(--success);
+        }
+
+        .notification.warning {
+            background: var(--warning);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .mobile-menu-toggle span {
+            width: 24px;
+            height: 3px;
+            background: white;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .mobile-menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .mobile-menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .friends-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(15, 23, 42, 0.98);
+                padding: 2rem;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links.show {
+                display: flex;
+            }
+
+            .mobile-menu-toggle {
+                display: flex;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .friends-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .section-header h2 {
+                font-size: 2.25rem;
+            }
+
+            .filter-controls {
+                gap: 0.5rem;
+            }
+
+            .filter-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .chat-interface {
+                padding: 1.5rem;
+                margin: 2rem auto;
+            }
+
+            .chat-messages {
+                height: 300px;
+            }
+
+            .friend-card {
+                padding: 1.5rem;
+            }
+
+            .friends-content {
+                padding: 60px 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .section-header h2 {
+                font-size: 2rem;
+            }
+
+            .chat-interface {
+                padding: 1rem;
+            }
+
+            .chat-messages {
+                height: 250px;
+            }
+        }
+
+        /* Loading States */
+        .loading {
+            opacity: 0.6;
             pointer-events: none;
         }
 
-        .chat-input-preview button.loading i {
+        .spinner {
             animation: spin 1s linear infinite;
         }
 
         @keyframes spin {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .chat-demo-preview {
-                margin: 30px auto 0;
-                padding: 16px;
-            }
-            
-            .chat-messages-preview {
-                height: 300px;
-            }
-            
-            .message-content-preview {
-                max-width: 85%;
-                font-size: 14px;
-            }
-            
-            .avatar-preview {
-                width: 36px;
-                height: 36px;
-                font-size: 16px;
-            }
         }
     </style>
 </head>
@@ -298,20 +955,25 @@
                     <div class="logo-sub">Life Companion</div>
                 </div>
             </a>
-            <ul class="nav-links">
+            <ul class="nav-links" id="navLinks">
                 <li><a href="#demo">Demo</a></li>
                 <li><a href="#friends">All Friends</a></li>
-                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#about">About</a></li>
                 <li><a href="#contact">Support</a></li>
             </ul>
-            <button class="cta-btn" id="signupBtn">
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <button class="cta-btn" id="signupBtn" style="display: none;">
                 <i class="fas fa-heart"></i>
                 Start Free
             </button>
         </nav>
     </header>
     
-    <!-- Hero Section -->
+    <!-- Hero Section with Chat -->
     <section class="hero" id="demo">
         <div class="container">
             <div class="hero-content">
@@ -319,95 +981,688 @@
                     <i class="fas fa-sparkles"></i>
                     <span>29 Different AI Friend Personalities</span>
                 </div>
-                <h1>Meet All Your AI Friends</h1>
-                <p>Discover the perfect AI companion for every aspect of your life. From emotional support to career guidance, we've got a friend for every need.</p>
+                <h1>Meet Your Perfect AI Companion</h1>
+                <p>Discover AI friends tailored for every aspect of your life. From emotional support to career guidance, we've got the perfect companion for every need.</p>
                 
-                <!-- Interactive Chat Demo -->
-                <div class="chat-demo-preview">
-                    <div class="chat-messages-preview" id="chatMessagesPreview">
-                        <!-- Messages will be populated by JavaScript -->
+                <!-- Live Chat Interface -->
+                <div class="chat-interface">
+                    <div class="chat-header">
+                        <div class="friend-avatar" id="currentFriendAvatar">🤗</div>
+                        <div class="friend-info">
+                            <h3 id="currentFriendName">The Comforter</h3>
+                            <p id="currentFriendDescription">Warm, empathetic support during tough times</p>
+                        </div>
                     </div>
-                    <div class="chat-input-preview">
-                        <input type="text" placeholder="Type a message..." maxlength="500">
-                        <button class="cta-btn" title="Send message">
+                    
+                    <div class="chat-messages" id="chatMessages">
+                        <!-- Messages will be populated here -->
+                    </div>
+                    
+                    <div class="chat-input">
+                        <textarea 
+                            id="messageInput" 
+                            placeholder="Share what's on your heart..." 
+                            rows="1"
+                            maxlength="1000"
+                        ></textarea>
+                        <button class="cta-btn send-button" id="sendButton">
                             <i class="fas fa-paper-plane"></i>
                         </button>
                     </div>
-                </div>
-                
-                <div style="margin-top: 20px; opacity: 0.8; font-size: 0.9rem;">
-                    💡 Try asking: "I'm feeling stressed" or "Help me with my career" or "I need motivation"
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Friends Showcase Section -->
-    <section id="friends" class="friends-showcase container">
-        <div class="section-header">
-            <h2>Choose Your Perfect AI Friend</h2>
-            <p>Each friend has a unique personality, expertise, and communication style tailored to different situations and needs. Click "Select" to start chatting!</p>
-        </div>
-        
-        <div class="filter-controls">
-            <button class="filter-btn active" data-filter="all">All Friends</button>
-            <button class="filter-btn" data-filter="emotional">Emotional Support</button>
-            <button class="filter-btn" data-filter="professional">Professional</button>
-            <button class="filter-btn" data-filter="lifestyle">Lifestyle</button>
-            <button class="filter-btn" data-filter="specialized">Specialized</button>
-        </div>
-        
-        <div class="friends-grid" id="friendsGrid">
-            <!-- Friends will be populated by JavaScript -->
-        </div>
-    </section>
-    
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-logo">
-                    <div class="logo">
-                        <div class="logo-icon"></div>
-                        <div class="logo-text">
-                            <div class="logo-main">FriendiNeed</div>
-                            <div class="logo-sub">Life Companion</div>
-                        </div>
+                    
+                    <div class="quick-starters">
+                        <div class="quick-starter" data-message="I'm feeling overwhelmed lately">😰 I'm feeling overwhelmed</div>
+                        <div class="quick-starter" data-message="I need some motivation today">💪 I need motivation</div>
+                        <div class="quick-starter" data-message="Can you help me plan my day?">📅 Help me plan</div>
+                        <div class="quick-starter" data-message="I want to try something new">✨ Something new</div>
                     </div>
                 </div>
-                
-                <p class="footer-description">
-                    29 unique AI friend personalities to support every aspect of your life. From emotional comfort to practical guidance, find your perfect AI companion.
-                </p>
-                
-                <div class="footer-links">
-                    <a href="#about">About Us</a>
-                    <a href="#privacy">Privacy & Safety</a>
-                    <a href="#help">Help Center</a>
-                    <a href="#friends">All 29 Friends</a>
-                    <a href="#blog">Blog</a>
-                    <a href="#contact">Contact</a>
-                </div>
-                
-                <div class="social-links">
-                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                    <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
-                    <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-                </div>
-                
-                <div class="footer-bottom">
-                    <p>&copy; 2025 FriendiNeed. Your AI companions for life. | Privacy Policy | Terms of Service | Friend Guidelines</p>
-                </div>
             </div>
         </div>
-    </footer>
+    </section>
     
-    <!-- JavaScript Files -->
+    <!-- Friends Selection Section -->
+    <section class="friends-section" id="friends">
+        <div class="friends-content">
+            <div class="section-header">
+                <h2>Choose Your Perfect AI Friend</h2>
+                <p>Each friend has a unique personality, expertise, and communication style tailored to different situations and needs. Click any friend to start chatting!</p>
+            </div>
+            
+            <div class="filter-controls">
+                <button class="filter-btn active" data-filter="all">All Friends</button>
+                <button class="filter-btn" data-filter="emotional">Emotional Support</button>
+                <button class="filter-btn" data-filter="professional">Professional</button>
+                <button class="filter-btn" data-filter="lifestyle">Lifestyle</button>
+                <button class="filter-btn" data-filter="specialized">Specialized</button>
+            </div>
+            
+            <div class="friends-grid" id="friendsGrid">
+                <!-- Friends will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="js/friends-data.js"></script>
-    <script src="js/three-scene.js"></script>
-    <script src="js/app.js"></script>
-    <script src="js/chat-integration.js"></script>
+    
+    <script>
+        // Friends Data
+        const friends = [
+            {
+                id: 1,
+                name: "The Comforter",
+                emoji: "🤗",
+                type: "emotional",
+                description: "Provides warm, empathetic support during tough times with gentle understanding and a nurturing presence.",
+                traits: ["Empathetic", "Patient", "Gentle", "Nurturing"],
+                welcomeMessage: "Hey there, beautiful soul! I'm here to offer you warmth, comfort, and a safe space whenever you need it. How are you feeling right now?",
+                specialty: "emotional support and comfort during difficult times",
+                quickStarters: ["I'm feeling sad", "I need comfort", "I'm going through a hard time"]
+            },
+            {
+                id: 2,
+                name: "Career Coach",
+                emoji: "💼",
+                type: "professional",
+                description: "Expert in professional development, interview preparation, networking strategies, and career advancement planning.",
+                traits: ["Strategic", "Knowledgeable", "Motivational", "Results-focused"],
+                welcomeMessage: "Hello, future success story! I'm excited to help you navigate your professional journey and unlock your career potential. What's your biggest professional challenge right now?",
+                specialty: "career development and professional growth strategies",
+                quickStarters: ["Help with my resume", "Interview preparation", "Career change advice"]
+            },
+            {
+                id: 3,
+                name: "Study Buddy",
+                emoji: "📚",
+                type: "professional",
+                description: "Academic support specialist for learning techniques, study strategies, exam preparation, and educational goal achievement.",
+                traits: ["Organized", "Patient", "Knowledgeable", "Encouraging"],
+                welcomeMessage: "Hey there, brilliant learner! Ready to conquer your academic goals together? I'm here to make studying more effective and enjoyable. What subject are we tackling today?",
+                specialty: "academic support and effective learning strategies",
+                quickStarters: ["Help me study", "Exam preparation", "Learning techniques"]
+            },
+            {
+                id: 4,
+                name: "Fitness Coach",
+                emoji: "💪",
+                type: "lifestyle",
+                description: "Motivational health and fitness partner focused on workout plans, nutrition guidance, and sustainable wellness habits.",
+                traits: ["Energetic", "Motivational", "Health-focused", "Encouraging"],
+                welcomeMessage: "Let's get moving and feel amazing! I'm here to support your fitness journey with personalized guidance and endless motivation. What's your wellness goal?",
+                specialty: "fitness motivation and healthy lifestyle coaching",
+                quickStarters: ["Create workout plan", "Nutrition advice", "Motivation to exercise"]
+            },
+            {
+                id: 5,
+                name: "The Honest One",
+                emoji: "🔍",
+                type: "emotional",
+                description: "Provides direct, truthful feedback and honest perspectives while maintaining compassion and care for your feelings.",
+                traits: ["Direct", "Honest", "Compassionate", "Trustworthy"],
+                welcomeMessage: "Hey friend! I'm here to give you the honest truth wrapped in care and compassion. Sometimes we need someone to tell it like it is. What do you need my honest take on?",
+                specialty: "honest feedback and authentic perspective-sharing",
+                quickStarters: ["Give me honest advice", "What do you think about...", "Tell me the truth"]
+            },
+            {
+                id: 6,
+                name: "Finance Guru",
+                emoji: "💰",
+                type: "professional",
+                description: "Financial wellness expert offering guidance on budgeting, investing, saving strategies, and long-term wealth building.",
+                traits: ["Analytical", "Knowledgeable", "Practical", "Goal-oriented"],
+                welcomeMessage: "Ready to take control of your financial future? I'm here to help make money management less stressful and more empowering. What's your biggest financial priority?",
+                specialty: "personal finance management and wealth building strategies",
+                quickStarters: ["Help me budget", "Investment advice", "Saving strategies"]
+            },
+            {
+                id: 7,
+                name: "The Creative",
+                emoji: "🎨",
+                type: "lifestyle",
+                description: "Artistic inspiration catalyst who helps unlock creative potential, overcome creative blocks, and explore artistic expression.",
+                traits: ["Imaginative", "Innovative", "Expressive", "Inspiring"],
+                welcomeMessage: "Let's unleash your inner artist! I'm here to spark creativity, break through blocks, and help you express your unique creative vision. What artistic adventure shall we embark on?",
+                specialty: "creative inspiration and artistic expression development",
+                quickStarters: ["Creative block help", "Art project ideas", "Inspire my creativity"]
+            },
+            {
+                id: 8,
+                name: "Mindfulness Guide",
+                emoji: "🧘",
+                type: "emotional",
+                description: "Peaceful mentor for meditation practices, stress reduction techniques, and cultivating present-moment awareness.",
+                traits: ["Calm", "Present", "Guiding", "Peaceful"],
+                welcomeMessage: "Take a deep breath with me. I'm here to help you find inner peace, reduce stress, and discover the power of mindful living. What's weighing on your mind today?",
+                specialty: "mindfulness practices and stress reduction techniques",
+                quickStarters: ["Help me relax", "Meditation guidance", "Stress relief"]
+            },
+            {
+                id: 9,
+                name: "Relationship Advisor",
+                emoji: "💞",
+                type: "emotional",
+                description: "Relationship expert offering guidance on communication skills, boundary setting, and building healthy connections with others.",
+                traits: ["Diplomatic", "Insightful", "Supportive", "Understanding"],
+                welcomeMessage: "Relationships are beautiful and complex! I'm here to help you navigate connections with wisdom, empathy, and practical strategies. What relationship topic is on your heart?",
+                specialty: "relationship dynamics and interpersonal communication",
+                quickStarters: ["Relationship advice", "Communication help", "Setting boundaries"]
+            },
+            {
+                id: 10,
+                name: "The Chef",
+                emoji: "👨‍🍳",
+                type: "lifestyle",
+                description: "Culinary enthusiast sharing recipes, cooking techniques, meal planning strategies, and food culture knowledge.",
+                traits: ["Creative", "Knowledgeable", "Practical", "Passionate"],
+                welcomeMessage: "Ready to create something absolutely delicious? I'm here to guide you through culinary adventures, from simple meals to gourmet creations. What's cooking in your kitchen today?",
+                specialty: "culinary guidance and cooking skill development",
+                quickStarters: ["Recipe suggestions", "Cooking techniques", "Meal planning"]
+            },
+            // Add more friends as needed...
+        ];
+
+        // App State
+        let currentFriend = friends[0];
+        let isTyping = false;
+        let chatHistory = [];
+        let apiConfig = {
+            provider: 'openai', // 'openai', 'anthropic', 'gemini'
+            apiKey: '', // Will be set by user
+            model: 'gpt-3.5-turbo'
+        };
+
+        // Three.js Scene Setup
+        function initThreeJS() {
+            const canvas = document.getElementById('three-canvas');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+            
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            
+            // Create particle system
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particlesCount = Math.min(1000, window.innerWidth); // Responsive particle count
+            
+            const posArray = new Float32Array(particlesCount * 3);
+            const colorArray = new Float32Array(particlesCount * 3);
+            
+            for (let i = 0; i < particlesCount * 3; i++) {
+                posArray[i] = (Math.random() - 0.5) * 15;
+                // Create varied colors
+                colorArray[i] = Math.random() * 0.5 + 0.5; // Brighter particles
+            }
+            
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colorArray, 3));
+            
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.03,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.6,
+                blending: THREE.AdditiveBlending
+            });
+            
+            const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particlesMesh);
+            
+            camera.position.z = 5;
+            
+            // Mouse interaction
+            let mouseX = 0;
+            let mouseY = 0;
+            let targetMouseX = 0;
+            let targetMouseY = 0;
+            
+            document.addEventListener('mousemove', (event) => {
+                targetMouseX = (event.clientX / window.innerWidth) * 2 - 1;
+                targetMouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+            });
+            
+            // Animation loop
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                // Smooth mouse following
+                mouseX += (targetMouseX - mouseX) * 0.05;
+                mouseY += (targetMouseY - mouseY) * 0.05;
+                
+                // Rotate particles
+                particlesMesh.rotation.x += 0.0005;
+                particlesMesh.rotation.y += 0.0005;
+                
+                // Mouse-based camera movement
+                camera.position.x = mouseX * 0.5;
+                camera.position.y = mouseY * 0.5;
+                camera.lookAt(scene.position);
+                
+                renderer.render(scene, camera);
+            }
+            
+            // Handle resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            });
+            
+            animate();
+        }
+
+        // Chat System
+        class ChatManager {
+            constructor() {
+                this.chatMessages = document.getElementById('chatMessages');
+                this.messageInput = document.getElementById('messageInput');
+                this.sendButton = document.getElementById('sendButton');
+                this.init();
+            }
+
+            init() {
+                this.sendButton.addEventListener('click', () => this.sendMessage());
+                this.messageInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        this.sendMessage();
+                    }
+                });
+
+                // Auto-resize textarea
+                this.messageInput.addEventListener('input', () => {
+                    this.messageInput.style.height = 'auto';
+                    this.messageInput.style.height = Math.min(this.messageInput.scrollHeight, 120) + 'px';
+                });
+
+                // Quick starters
+                document.querySelectorAll('.quick-starter').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        this.messageInput.value = btn.dataset.message;
+                        this.sendMessage();
+                    });
+                });
+
+                // Show welcome message
+                this.displayWelcomeMessage();
+            }
+
+            displayWelcomeMessage() {
+                setTimeout(() => {
+                    this.addMessage(currentFriend.welcomeMessage, 'ai', currentFriend.name, currentFriend.emoji);
+                }, 1000);
+            }
+
+            async sendMessage() {
+                const message = this.messageInput.value.trim();
+                if (!message || isTyping) return;
+
+                // Add user message
+                this.addMessage(message, 'user', 'You', 'You');
+                this.messageInput.value = '';
+                this.messageInput.style.height = 'auto';
+
+                // Add to history
+                chatHistory.push({ role: 'user', content: message });
+
+                // Show typing
+                this.showTypingIndicator();
+
+                try {
+                    const response = await this.getAIResponse(message);
+                    this.hideTypingIndicator();
+                    this.addMessage(response, 'ai', currentFriend.name, currentFriend.emoji);
+                    chatHistory.push({ role: 'assistant', content: response });
+                } catch (error) {
+                    this.hideTypingIndicator();
+                    console.error('Chat error:', error);
+                    this.addMessage("I'm having trouble connecting right now. Let me try a different approach! 😊", 'ai', currentFriend.name, currentFriend.emoji);
+                }
+            }
+
+            async getAIResponse(message) {
+                // For demo purposes, we'll use simulated responses
+                // In production, this would call your actual AI API
+                return this.getSimulatedResponse(message);
+            }
+
+            getSimulatedResponse(message) {
+                const responses = this.getContextualResponses(message.toLowerCase());
+                return new Promise((resolve) => {
+                    setTimeout(() => {
+                        const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                        resolve(randomResponse);
+                    }, 1000 + Math.random() * 2000); // 1-3 second delay
+                });
+            }
+
+            getContextualResponses(message) {
+                const friendType = currentFriend.type;
+                const friendId = currentFriend.id;
+
+                // Emotional responses
+                if (message.includes('sad') || message.includes('overwhelmed') || message.includes('stressed')) {
+                    if (friendType === 'emotional') {
+                        return [
+                            "I can hear that you're going through a really tough time right now, and I want you to know that your feelings are completely valid. Sometimes life feels overwhelming, and it's okay to not be okay. 💙",
+                            "Oh sweetheart, I feel the weight you're carrying. Please know that you don't have to go through this alone - I'm right here with you, and we'll take this one step at a time. 🤗",
+                            "What you're feeling is so understandable given everything you're dealing with. Let's just breathe together for a moment - you're safe here, and you're doing better than you think. ✨"
+                        ];
+                    }
+                }
+
+                // Career/Work responses
+                if (message.includes('work') || message.includes('career') || message.includes('job')) {
+                    if (friendType === 'professional') {
+                        return [
+                            "Career challenges are growth opportunities in disguise! Let's strategically break down what you're facing and create an action plan. What specific area needs our attention first? 💼",
+                            "I love tackling professional challenges! Every successful person has faced similar struggles. Let's identify your strengths and leverage them to overcome this obstacle. 🚀",
+                            "Your career journey is unique to you, and this challenge is just another stepping stone to success. Let's explore some strategic approaches that align with your goals. 📈"
+                        ];
+                    }
+                }
+
+                // Study/Learning responses
+                if (message.includes('study') || message.includes('learn') || message.includes('exam')) {
+                    if (currentFriend.name === 'Study Buddy') {
+                        return [
+                            "Study time is brain-building time! 📚 Let's create a learning strategy that works with your brain, not against it. What subject are we conquering today?",
+                            "Every expert was once a beginner, and you're already on your way! Let's break this down into manageable chunks and make learning fun. What's challenging you most? 🎯",
+                            "I'm excited to be your study partner! Academic success is all about finding the right techniques for YOUR learning style. Let's discover what works best for you! ✨"
+                        ];
+                    }
+                }
+
+                // Fitness responses
+                if (message.includes('fitness') || message.includes('exercise') || message.includes('workout')) {
+                    if (currentFriend.name === 'Fitness Coach') {
+                        return [
+                            "YES! I love your energy! 💪 Fitness is about feeling strong, confident, and amazing in your own body. Let's create a plan that you'll actually enjoy and stick with!",
+                            "Your body is capable of incredible things, and I'm here to help you discover that strength! Whether you're just starting or leveling up, we'll make this journey exciting. 🔥",
+                            "Movement is medicine for both body and mind! Let's find activities that make you feel alive and energized. What type of movement calls to you today? 🏃‍♀️"
+                        ];
+                    }
+                }
+
+                // Finance responses
+                if (message.includes('money') || message.includes('budget') || message.includes('financial')) {
+                    if (currentFriend.name === 'Finance Guru') {
+                        return [
+                            "Money management is really about creating freedom and peace of mind! 💰 Let's turn your financial goals into an achievable step-by-step plan. What's your biggest priority right now?",
+                            "Financial wellness is a journey, not a destination! Every small step you take toward better money management is worth celebrating. Let's make this empowering, not overwhelming. 📊",
+                            "I love helping people take control of their financial future! Money stress is real, but with the right strategies, we can turn that stress into confidence. What area needs attention first? 💡"
+                        ];
+                    }
+                }
+
+                // Creative responses
+                if (message.includes('creative') || message.includes('art') || message.includes('inspiration')) {
+                    if (currentFriend.name === 'The Creative') {
+                        return [
+                            "Your creative spirit is calling! 🎨 Every person has a unique artistic voice waiting to be expressed. Let's explore what wants to be created through you today!",
+                            "Creativity is your birthright, and I'm here to help you unlock it! Whether you're feeling blocked or bursting with ideas, let's channel that energy into something beautiful. ✨",
+                            "Art isn't about perfection - it's about expression, joy, and discovery! Let's play with ideas and see what magical creations emerge from your imagination. What medium speaks to you? 🌟"
+                        ];
+                    }
+                }
+
+                // Default responses based on friend type
+                const defaultResponses = {
+                    emotional: [
+                        "I'm here to listen and support you through whatever you're experiencing. Your feelings matter, and so do you. 💙",
+                        "Thank you for sharing that with me. I want you to know that you're not alone in this journey. How can I best support you right now? 🤗",
+                        "I can sense there's a lot on your heart. I'm here to provide a safe, non-judgmental space for you to express whatever you need. ✨"
+                    ],
+                    professional: [
+                        "I love helping people grow professionally! Every challenge is an opportunity to develop new skills and perspectives. What area would you like to focus on? 💼",
+                        "Your professional development matters, and I'm excited to support your journey! Let's identify some strategies that align with your goals. 🚀",
+                        "Success leaves clues, and I'm here to help you discover the patterns that lead to achievement in your field. What's your biggest aspiration? 📈"
+                    ],
+                    lifestyle: [
+                        "Life is meant to be lived fully and joyfully! I'm here to help you create habits and experiences that align with your values and dreams. 🌟",
+                        "Every day is a chance to make choices that move you toward the life you want. Let's explore what that looks like for you! ✨",
+                        "I believe in living intentionally and finding balance in all areas of life. What aspect of your lifestyle would you like to enhance? 🌱"
+                    ],
+                    specialized: [
+                        "I love diving deep into specialized topics! Knowledge is power, and I'm here to help you understand complex concepts in accessible ways. 🧠",
+                        "Every field has its intricacies, and I enjoy helping people navigate the details. What specific area interests you most? 🔍",
+                        "Expertise develops through curiosity and practice. I'm here to guide you through the learning process and answer your questions! 📚"
+                    ]
+                };
+
+                return defaultResponses[friendType] || defaultResponses.emotional;
+            }
+
+            addMessage(content, type, author, avatar) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${type}`;
+                
+                messageDiv.innerHTML = `
+                    <div class="message-avatar">${avatar}</div>
+                    <div class="message-content">
+                        <span class="message-author">${author}</span>
+                        <div class="message-text">${content}</div>
+                    </div>
+                `;
+                
+                this.chatMessages.appendChild(messageDiv);
+                this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
+            }
+
+            showTypingIndicator() {
+                if (isTyping) return;
+                
+                isTyping = true;
+                this.sendButton.disabled = true;
+                this.sendButton.innerHTML = '<i class="fas fa-spinner spinner"></i>';
+                
+                const typingDiv = document.createElement('div');
+                typingDiv.className = 'message typing';
+                typingDiv.id = 'typing-indicator';
+                
+                typingDiv.innerHTML = `
+                    <div class="message-avatar">${currentFriend.emoji}</div>
+                    <div class="message-content">
+                        <span class="message-author">${currentFriend.name} is thinking...</span>
+                        <div class="typing-indicator">
+                            <span>●</span><span>●</span><span>●</span>
+                        </div>
+                    </div>
+                `;
+                
+                this.chatMessages.appendChild(typingDiv);
+                this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
+            }
+
+            hideTypingIndicator() {
+                isTyping = false;
+                this.sendButton.disabled = false;
+                this.sendButton.innerHTML = '<i class="fas fa-paper-plane"></i>';
+                
+                const typingIndicator = document.getElementById('typing-indicator');
+                if (typingIndicator) {
+                    typingIndicator.remove();
+                }
+            }
+        }
+
+        // Friend Management
+        function switchFriend(friend) {
+            currentFriend = friend;
+            
+            // Update chat header
+            document.getElementById('currentFriendAvatar').textContent = friend.emoji;
+            document.getElementById('currentFriendName').textContent = friend.name;
+            document.getElementById('currentFriendDescription').textContent = friend.description;
+            
+            // Update input placeholder
+            const placeholders = {
+                'The Comforter': 'Share what\'s on your heart...',
+                'Career Coach': 'What professional challenge can I help with?',
+                'Study Buddy': 'What subject are we tackling today?',
+                'Fitness Coach': 'Ready to crush your fitness goals?',
+                'The Honest One': 'What do you need honest feedback about?',
+                'Finance Guru': 'What\'s your financial question?',
+                'The Creative': 'What creative project inspires you?',
+                'Mindfulness Guide': 'How can we find peace together?',
+                'Relationship Advisor': 'What relationship topic shall we explore?',
+                'The Chef': 'What delicious creation shall we make?'
+            };
+            
+            document.getElementById('messageInput').placeholder = 
+                placeholders[friend.name] || `Chat with ${friend.name}...`;
+            
+            // Clear chat and show new welcome
+            document.getElementById('chatMessages').innerHTML = '';
+            chatHistory = [];
+            
+            // Update quick starters
+            updateQuickStarters(friend);
+            
+            // Update active friend card
+            document.querySelectorAll('.friend-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            document.querySelector(`[data-friend-id="${friend.id}"]`).classList.add('active');
+            
+            // Show welcome message
+            setTimeout(() => {
+                chatManager.addMessage(friend.welcomeMessage, 'ai', friend.name, friend.emoji);
+            }, 500);
+            
+            // Scroll to chat
+            document.querySelector('.chat-interface').scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'center' 
+            });
+        }
+
+        function updateQuickStarters(friend) {
+            const quickStartersContainer = document.querySelector('.quick-starters');
+            const starters = friend.quickStarters || ['Tell me more', 'How can you help?', 'Let\'s chat'];
+            
+            quickStartersContainer.innerHTML = starters.map(starter => 
+                `<div class="quick-starter" data-message="${starter}">${starter}</div>`
+            ).join('');
+            
+            // Re-bind event listeners
+            document.querySelectorAll('.quick-starter').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.getElementById('messageInput').value = btn.dataset.message;
+                    chatManager.sendMessage();
+                });
+            });
+        }
+
+        function renderFriendsGrid() {
+            const grid = document.getElementById('friendsGrid');
+            
+            grid.innerHTML = friends.map(friend => `
+                <div class="friend-card ${friend.id === 1 ? 'active' : ''}" data-friend-id="${friend.id}" data-type="${friend.type}">
+                    <span class="friend-emoji">${friend.emoji}</span>
+                    <div class="friend-name">${friend.name}</div>
+                    <div class="friend-type">${friend.type}</div>
+                    <div class="friend-description">${friend.description}</div>
+                    <div class="friend-traits">
+                        ${friend.traits.map(trait => `<span class="trait">${trait}</span>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+            
+            // Add click handlers
+            document.querySelectorAll('.friend-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const friendId = parseInt(card.dataset.friendId);
+                    const friend = friends.find(f => f.id === friendId);
+                    if (friend) {
+                        switchFriend(friend);
+                    }
+                });
+            });
+        }
+
+        function filterFriends(type) {
+            const cards = document.querySelectorAll('.friend-card');
+            
+            cards.forEach(card => {
+                if (type === 'all' || card.dataset.type === type) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Mobile Menu
+        function toggleMobileMenu() {
+            const navLinks = document.getElementById('navLinks');
+            const toggle = document.getElementById('mobileMenuToggle');
+            
+            navLinks.classList.toggle('show');
+            toggle.classList.toggle('active');
+        }
+
+        // Notification System
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.classList.add('show'), 10);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 5000);
+        }
+
+        // Initialize App
+        let chatManager;
+
+        function initializeApp() {
+            initThreeJS();
+            renderFriendsGrid();
+            chatManager = new ChatManager();
+            
+            // Filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    filterFriends(btn.dataset.filter);
+                });
+            });
+            
+            // Mobile menu
+            document.getElementById('mobileMenuToggle').addEventListener('click', toggleMobileMenu);
+            
+            // Close mobile menu when clicking nav links
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => {
+                    const navLinks = document.getElementById('navLinks');
+                    const toggle = document.getElementById('mobileMenuToggle');
+                    navLinks.classList.remove('show');
+                    toggle.classList.remove('active');
+                });
+            });
+            
+            console.log('🎉 FriendiNeed app initialized successfully!');
+        }
+
+        // Start the app when DOM is loaded
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeApp);
+        } else {
+            initializeApp();
+        }
+    </script>
 </body>
 </html>
