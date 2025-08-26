@@ -1,10 +1,20 @@
 [build]
   functions = "netlify/functions"
-  command = "echo 'Build complete'"
+  command = "npm run build"
   publish = "."
+
+[build.environment]
+  NODE_VERSION = "18"
 
 [functions]
   node_bundler = "esbuild"
+  directory = "netlify/functions"
+
+# Rate limiting and security
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
 
 [[redirects]]
   from = "/*"
@@ -12,8 +22,21 @@
   status = 200
 
 [[headers]]
-  for = "/api/*"
+  for = "/.netlify/functions/*"
   [headers.values]
     Access-Control-Allow-Origin = "*"
-    Access-Control-Allow-Headers = "Content-Type"
+    Access-Control-Allow-Headers = "Content-Type, Authorization, X-API-Provider, X-API-Key"
     Access-Control-Allow-Methods = "GET, POST, OPTIONS"
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Content-Security-Policy = "default-src 'self' 'unsafe-inline' 'unsafe-eval' https:; img-src 'self' data: https:; font-src 'self' https: data:;"
