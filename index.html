@@ -3,62 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FriendiNeed - Your Personal AI Life Companion</title>
+    <title>FriendiNeed - The World's First AI + Human Hybrid Companion Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    
     <style>
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
-            --primary-light: #3b82f6;
-            --secondary: #8b5cf6;
-            --accent: #06d6a0;
-            --warning: #fbbf24;
-            --error: #ef4444;
-            --success: #10b981;
-            
-            /* Neutral palette */
-            --gray-50: #f8fafc;
-            --gray-100: #f1f5f9;
-            --gray-200: #e2e8f0;
-            --gray-300: #cbd5e1;
-            --gray-400: #94a3b8;
-            --gray-500: #64748b;
-            --gray-600: #475569;
-            --gray-700: #334155;
-            --gray-800: #1e293b;
-            --gray-900: #0f172a;
-            
-            /* Dark theme */
-            --dark-bg: #0a0f1c;
-            --dark-surface: #111827;
-            --dark-surface-light: #1f2937;
-            --dark-border: #374151;
-            
-            --white: #ffffff;
-            --black: #000000;
-            
-            /* Gradients */
-            --gradient-primary: linear-gradient(135deg, #2563eb 0%, #8b5cf6 100%);
-            --gradient-accent: linear-gradient(135deg, #06d6a0 0%, #2563eb 100%);
-            --gradient-tech: linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%);
-            --gradient-surface: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
-            --gradient-hero: radial-gradient(ellipse at top, #1e40af 0%, #1e293b 70%, #0f172a 100%);
-            
-            /* Shadows */
-            --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-            --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-            --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
-            
-            /* Typography */
-            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+            --primary: #5B4CFF;
+            --secondary: #00D9FF;
+            --dark: #0F172A;
+            --light: #F8FAFC;
+            --gray: #64748B;
+            --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
         }
 
         * {
@@ -68,44 +23,36 @@
         }
 
         body {
-            font-family: var(--font-sans);
-            line-height: 1.6;
-            color: var(--gray-900);
-            background: var(--gradient-hero);
-            min-height: 100vh;
-            font-weight: 400;
-            letter-spacing: -0.01em;
+            font-family: 'Inter', sans-serif;
+            color: var(--light);
+            background-color: var(--dark);
             overflow-x: hidden;
+            position: relative;
         }
 
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        /* Three.js Canvas */
-        #three-canvas {
+        #canvas-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -2;
-            pointer-events: none;
+            z-index: -1;
         }
 
-        /* Header */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
         header {
-            background: rgba(15, 23, 42, 0.9);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 1rem 0;
+            padding: 20px 0;
             position: fixed;
             width: 100%;
             top: 0;
-            z-index: 1000;
+            z-index: 100;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
             transition: all 0.3s ease;
         }
 
@@ -116,1553 +63,2377 @@
         }
 
         .logo {
+            font-size: 24px;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--white);
-            text-decoration: none;
-            transition: transform 0.3s ease;
+            gap: 10px;
         }
 
-        .logo:hover {
-            transform: scale(1.02);
-        }
-
-        .logo-icon {
-            width: 42px;
-            height: 42px;
-            background: var(--gradient-primary);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            box-shadow: var(--shadow-lg);
-        }
-
-        .logo-icon::before {
-            content: '';
-            position: absolute;
-            inset: 2px;
-            background: var(--gradient-accent);
-            border-radius: 8px;
-            opacity: 0.8;
-        }
-
-        .logo-icon::after {
-            content: '🤗';
-            font-size: 18px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .logo-text {
-            display: flex;
-            flex-direction: column;
-            line-height: 1.2;
-        }
-
-        .logo-main {
-            font-size: 1.4rem;
-            font-weight: 800;
-            letter-spacing: -0.02em;
-        }
-
-        .logo-sub {
-            font-size: 0.65rem;
-            font-weight: 500;
-            opacity: 0.7;
-            font-family: var(--font-mono);
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
+        .logo i {
+            -webkit-text-fill-color: var(--primary);
         }
 
         .nav-links {
             display: flex;
+            gap: 30px;
             list-style: none;
-            gap: 2.5rem;
         }
 
         .nav-links a {
-            color: rgba(255, 255, 255, 0.9);
+            color: var(--light);
             text-decoration: none;
             font-weight: 500;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-            position: relative;
-            padding: 0.5rem 0;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -2px;
-            left: 50%;
-            background: var(--primary-light);
-            transition: all 0.3s ease;
-            transform: translateX(-50%);
+            transition: color 0.3s ease;
         }
 
         .nav-links a:hover {
-            color: var(--white);
+            color: var(--secondary);
         }
 
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        .cta-btn {
-            background: var(--gradient-primary);
-            color: var(--white);
-            padding: 0.75rem 1.8rem;
+        .cta-button {
+            background: var(--gradient);
+            color: white;
             border: none;
-            border-radius: 12px;
-            cursor: pointer;
+            padding: 10px 20px;
+            border-radius: 8px;
             font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-            box-shadow: var(--shadow-lg);
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            position: relative;
-            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .cta-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(91, 76, 255, 0.3);
         }
 
-        .cta-btn:hover::before {
-            left: 100%;
+        main {
+            margin-top: 80px;
         }
 
-        .cta-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-xl);
+        section {
+            padding: 80px 0;
         }
 
-        .cta-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .cta-btn.secondary {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        /* Hero Section */
         .hero {
-            padding: 140px 0 80px;
-            color: var(--white);
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
             position: relative;
-            overflow: hidden;
         }
 
         .hero-content {
-            position: relative;
-            z-index: 1;
-            max-width: 900px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: rgba(37, 99, 235, 0.1);
-            border: 1px solid rgba(37, 99, 235, 0.3);
-            color: var(--primary-light);
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            margin-bottom: 2rem;
-            backdrop-filter: blur(10px);
+            max-width: 600px;
         }
 
         .hero h1 {
-            font-size: 4rem;
+            font-size: 56px;
             font-weight: 800;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 40%, #cbd5e1 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: fadeInUp 1s ease;
-            letter-spacing: -0.02em;
-            line-height: 1.1;
-        }
-
-        .hero p {
-            font-size: 1.25rem;
-            margin-bottom: 3rem;
-            opacity: 0.9;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-            animation: fadeInUp 1s ease 0.2s both;
-            font-weight: 400;
-            line-height: 1.6;
-        }
-
-        /* Chat Interface */
-        .chat-interface {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-radius: 20px;
-            padding: 2rem;
-            margin: 3rem auto;
-            max-width: 800px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: var(--shadow-2xl);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .chat-interface::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--primary), transparent);
-        }
-
-        .chat-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .friend-avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: var(--gradient-primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            color: var(--white);
-            border: 3px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .friend-info h3 {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-
-        .friend-info p {
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-
-        .chat-messages {
-            height: 400px;
-            overflow-y: auto;
-            margin-bottom: 1.5rem;
-            scrollbar-width: thin;
-            scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
-        }
-
-        .chat-messages::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .chat-messages::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
-        }
-
-        .chat-messages::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 3px;
-        }
-
-        .message {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 16px;
-            align-items: flex-start;
-            animation: messageSlideIn 0.3s ease-out;
-        }
-
-        .message.user {
-            flex-direction: row-reverse;
-        }
-
-        .message-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            flex-shrink: 0;
-            color: white;
-            font-weight: 600;
-        }
-
-        .message.user .message-avatar {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            font-size: 14px;
-        }
-
-        .message-content {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 18px;
-            padding: 12px 16px;
-            max-width: 70%;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative;
-        }
-
-        .message.user .message-content {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .message-author {
-            font-weight: 600;
-            font-size: 12px;
-            opacity: 0.8;
-            display: block;
-            margin-bottom: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .message-text {
-            line-height: 1.5;
-        }
-
-        .typing-indicator {
-            display: flex;
-            gap: 4px;
-            margin-top: 8px;
-        }
-
-        .typing-indicator span {
-            animation: typing-pulse 1.4s ease-in-out infinite;
-            color: rgba(255, 255, 255, 0.6);
-        }
-
-        .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
-        .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
-        .typing-indicator span:nth-child(3) { animation-delay: 0s; }
-
-        .chat-input {
-            display: flex;
-            gap: 12px;
-            align-items: flex-end;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 25px;
-            padding: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .chat-input textarea {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: white;
-            font-size: 16px;
-            padding: 12px 16px;
-            outline: none;
-            resize: none;
-            font-family: inherit;
-            max-height: 120px;
-            min-height: 44px;
-        }
-
-        .chat-input textarea::placeholder {
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        .send-button {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            flex-shrink: 0;
-        }
-
-        .send-button:hover {
-            transform: scale(1.1);
-        }
-
-        .send-button:disabled {
-            opacity: 0.5;
-            transform: none;
-        }
-
-        /* Friends Grid */
-        .friends-section {
-            background: var(--white);
-            margin: 80px auto;
-            border-radius: 24px;
-            box-shadow: var(--shadow-2xl);
-            border: 1px solid var(--gray-100);
-            position: relative;
-            overflow: hidden;
-            max-width: 1200px;
-        }
-
-        .friends-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--primary), transparent);
-        }
-
-        .friends-content {
-            padding: 100px 2rem;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .section-header h2 {
-            font-size: 3rem;
-            font-weight: 800;
-            color: var(--gray-900);
-            margin-bottom: 1rem;
-            letter-spacing: -0.02em;
+            margin-bottom: 20px;
             line-height: 1.2;
         }
 
-        .section-header p {
-            font-size: 1.25rem;
-            color: var(--gray-600);
-            max-width: 700px;
-            margin: 0 auto;
+        .gradient-text {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            color: #CBD5E1;
             line-height: 1.6;
         }
 
-        .filter-controls {
+        .hero-buttons {
             display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 3rem;
+            gap: 20px;
             flex-wrap: wrap;
         }
 
-        .filter-btn {
-            padding: 0.75rem 1.5rem;
-            background: var(--gray-100);
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            color: var(--gray-700);
-        }
-
-        .filter-btn.active, .filter-btn:hover {
-            background: var(--gradient-primary);
+        .primary-button {
+            background: var(--gradient);
             color: white;
-        }
-
-        .friends-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .friend-card {
-            background: var(--gradient-surface);
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: var(--shadow-lg);
-            transition: all 0.4s ease;
-            border: 1px solid var(--gray-100);
-            position: relative;
-            overflow: hidden;
-            text-align: center;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
         }
 
-        .friend-card::before {
+        .primary-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(91, 76, 255, 0.3);
+        }
+
+        .secondary-button {
+            background: transparent;
+            color: white;
+            border: 2px solid var(--primary);
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .secondary-button:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .section-title {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .section-subtitle {
+            font-size: 18px;
+            color: #CBD5E1;
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 60px;
+            line-height: 1.6;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(100, 116, 139, 0.2);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(91, 76, 255, 0.15);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .feature-card h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .feature-card p {
+            color: #CBD5E1;
+            line-height: 1.6;
+        }
+
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 48px;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            color: #CBD5E1;
+            margin-top: 10px;
+        }
+
+        .pricing-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .pricing-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 40px 30px;
+            border: 1px solid rgba(100, 116, 139, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            border: 2px solid var(--primary);
+            transform: scale(1.05);
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(91, 76, 255, 0.15);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-10px);
+        }
+
+        .pricing-badge {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gradient);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .pricing-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .pricing-price {
+            font-size: 42px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .pricing-period {
+            color: #CBD5E1;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+
+        .pricing-features li {
+            padding: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pricing-features i {
+            color: var(--secondary);
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .timeline::after {
             content: '';
             position: absolute;
+            width: 4px;
+            background: var(--gradient);
             top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: var(--gradient-primary);
-            transform: scaleX(0);
-            transition: transform 0.4s ease;
-        }
-
-        .friend-card:hover::before {
-            transform: scaleX(1);
-        }
-
-        .friend-card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-2xl);
-        }
-
-        .friend-card.active {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
-            border: 2px solid rgba(37, 99, 235, 0.5);
-        }
-
-        .friend-card.active::before {
-            transform: scaleX(1);
-            background: linear-gradient(90deg, #2563eb, #8b5cf6);
-        }
-
-        .friend-emoji {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            display: block;
-        }
-
-        .friend-name {
-            font-weight: 700;
-            font-size: 1.25rem;
-            margin-bottom: 0.5rem;
-            color: var(--gray-900);
-        }
-
-        .friend-type {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            background: var(--gray-100);
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--gray-600);
-            margin-bottom: 1rem;
-            text-transform: capitalize;
-        }
-
-        .friend-description {
-            color: var(--gray-600);
-            line-height: 1.6;
-            margin-bottom: 1.5rem;
-            font-size: 0.95rem;
-        }
-
-        .friend-traits {
-            display: flex;
-            justify-content: center;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-            margin-bottom: 1.5rem;
-        }
-
-        .trait {
-            padding: 0.25rem 0.5rem;
-            background: var(--gray-100);
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: 500;
-            color: var(--gray-600);
-        }
-
-        .quick-starters {
-            margin-top: 1rem;
-            text-align: center;
-        }
-
-        .quick-starter {
-            display: inline-block;
-            margin: 0.25rem;
-            padding: 0.5rem 1rem;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .quick-starter:hover {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-        }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes messageSlideIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes typing-pulse {
-            0%, 80%, 100% {
-                opacity: 0.3;
-                transform: scale(1);
-            }
-            40% {
-                opacity: 1;
-                transform: scale(1.2);
-            }
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.5;
-            }
-        }
-
-        /* Notification System */
-        .notification {
-            position: fixed;
-            top: 100px;
-            right: 20px;
-            background: var(--primary);
-            color: white;
-            padding: 1rem 1.5rem;
-            border-radius: 12px;
-            box-shadow: var(--shadow-lg);
-            z-index: 10000;
-            max-width: 400px;
-            transform: translateX(100%);
-            transition: transform 0.3s ease;
-            white-space: pre-line;
-            font-size: 0.9rem;
-            line-height: 1.5;
-        }
-
-        .notification.show {
-            transform: translateX(0);
-        }
-
-        .notification.error {
-            background: var(--error);
-        }
-
-        .notification.success {
-            background: var(--success);
-        }
-
-        .notification.warning {
-            background: var(--warning);
-        }
-
-        /* Mobile Menu */
-        .mobile-menu-toggle {
-            display: none;
-            flex-direction: column;
-            gap: 4px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 8px;
-        }
-
-        .mobile-menu-toggle span {
-            width: 24px;
-            height: 3px;
-            background: white;
-            transition: all 0.3s ease;
+            bottom: 0;
+            left: 50%;
+            margin-left: -2px;
             border-radius: 2px;
         }
 
-        .mobile-menu-toggle.active span:nth-child(1) {
-            transform: rotate(45deg) translate(8px, 8px);
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
         }
 
-        .mobile-menu-toggle.active span:nth-child(2) {
-            opacity: 0;
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: var(--gradient);
+            border-radius: 50%;
+            top: 15px;
+            z-index: 1;
         }
 
-        .mobile-menu-toggle.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -6px);
+        .left {
+            left: 0;
         }
 
-        /* Responsive Design */
-        @media (max-width: 1024px) {
-            .friends-grid {
-                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            }
+        .right {
+            left: 50%;
+        }
+
+        .left::after {
+            right: -10px;
+        }
+
+        .right::after {
+            left: -10px;
+        }
+
+        .timeline-content {
+            padding: 20px 30px;
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid rgba(100, 116, 139, 0.2);
+        }
+
+        .timeline-date {
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+
+        .timeline-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .timeline-description {
+            color: #CBD5E1;
+            line-height: 1.6;
+        }
+
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 40px;
+            border: 1px solid rgba(100, 116, 139, 0.2);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(100, 116, 139, 0.3);
+            border-radius: 8px;
+            color: var(--light);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        footer {
+            background: rgba(15, 23, 42, 0.9);
+            padding: 60px 0 30px;
+            border-top: 1px solid rgba(100, 116, 139, 0.2);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #CBD5E1;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--secondary);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: rgba(100, 116, 139, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--light);
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: var(--gradient);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(100, 116, 139, 0.2);
+            color: #64748B;
+        }
+
+        /* Companion Selection Styles */
+        .companion-section {
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+
+        .companion-categories {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .companion-category {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid rgba(100, 116, 139, 0.2);
+        }
+
+        .companion-category h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: var(--secondary);
+        }
+
+        .companion-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .companion-card {
+            background: rgba(15, 23, 42, 0.7);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(100, 116, 139, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .companion-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(91, 76, 255, 0.2);
+            border-color: var(--primary);
+        }
+
+        .companion-card.selected {
+            border-color: var(--secondary);
+            background: rgba(91, 76, 255, 0.1);
+        }
+
+        .companion-card.selected::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: var(--secondary);
+            font-size: 18px;
+        }
+
+        .companion-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .companion-card h4 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .companion-card p {
+            font-size: 14px;
+            color: #CBD5E1;
+            line-height: 1.4;
+        }
+
+        .combinations-section {
+            margin-top: 60px;
+        }
+
+        .combinations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .combination-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid rgba(100, 116, 139, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .combination-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(91, 76, 255, 0.15);
+        }
+
+        .combination-card h4 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: var(--secondary);
+        }
+
+        .combination-card p {
+            color: #CBD5E1;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .combination-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tag {
+            background: rgba(91, 76, 255, 0.2);
+            color: var(--light);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .human-connection {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            margin-top: 60px;
+            border: 1px solid rgba(100, 116, 139, 0.2);
+        }
+
+        .human-connection h3 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .human-connection p {
+            max-width: 700px;
+            margin: 0 auto 30px;
+            color: #CBD5E1;
+            line-height: 1.6;
+        }
+
+        .companion-selector {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .companion-selector button {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(100, 116, 139, 0.3);
+            color: var(--light);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .companion-selector button.active {
+            background: var(--gradient);
+            border-color: transparent;
+        }
+
+        .companion-selector button:hover {
+            border-color: var(--primary);
+        }
+
+        .selected-companions {
+            background: rgba(15, 23, 42, 0.7);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 30px;
+            min-height: 100px;
+            border: 1px dashed rgba(100, 116, 139, 0.3);
+        }
+
+        .selected-companions h4 {
+            margin-bottom: 15px;
+            color: var(--secondary);
+        }
+
+        .selected-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .selected-item {
+            background: rgba(91, 76, 255, 0.2);
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .selected-item button {
+            background: none;
+            border: none;
+            color: var(--light);
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        /* Chat Window Styles */
+        .chat-window {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 350px;
+            height: 500px;
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid rgba(100, 116, 139, 0.3);
+            display: none;
+            flex-direction: column;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .chat-window.active {
+            display: flex;
+        }
+
+        .chat-header {
+            padding: 15px;
+            border-bottom: 1px solid rgba(100, 116, 139, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-header h3 {
+            font-size: 18px;
+            margin: 0;
+        }
+
+        .chat-close {
+            background: none;
+            border: none;
+            color: var(--light);
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .chat-companion-select {
+            padding: 15px;
+            border-bottom: 1px solid rgba(100, 116, 139, 0.3);
+        }
+
+        .chat-companion-select select {
+            width: 100%;
+            padding: 8px;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(100, 116, 139, 0.3);
+            border-radius: 6px;
+            color: var(--light);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 10px 15px;
+            border-radius: 18px;
+            line-height: 1.4;
+        }
+
+        .message.user {
+            align-self: flex-end;
+            background: var(--gradient);
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.companion {
+            align-self: flex-start;
+            background: rgba(100, 116, 139, 0.2);
+            border-bottom-left-radius: 4px;
+        }
+
+        .chat-input {
+            padding: 15px;
+            border-top: 1px solid rgba(100, 116, 139, 0.3);
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(100, 116, 139, 0.3);
+            border-radius: 20px;
+            color: var(--light);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .chat-input button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gradient);
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Investor Section Styles */
+        .investor-section {
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 20px;
+            padding: 60px 40px;
+            margin-bottom: 60px;
+        }
+
+        .investor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .investor-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid rgba(100, 116, 139, 0.2);
+            height: 100%;
+        }
+
+        .investor-card h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: var(--secondary);
+        }
+
+        .investor-card ul {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .investor-card li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(100, 116, 139, 0.1);
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .investor-card li:last-child {
+            border-bottom: none;
+        }
+
+        .investor-card li i {
+            color: var(--secondary);
+            margin-top: 4px;
+        }
+
+        .funding-rounds {
+            margin-top: 50px;
+        }
+
+        .funding-round {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(100, 116, 139, 0.2);
+        }
+
+        .funding-round h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: var(--secondary);
+        }
+
+        .funding-amount {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .funding-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .funding-detail {
+            background: rgba(15, 23, 42, 0.5);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .funding-detail h4 {
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: #CBD5E1;
+        }
+
+        .funding-detail p {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .competitive-analysis {
+            margin-top: 60px;
+        }
+
+        .competitor-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 30px;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        .competitor-table th, .competitor-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(100, 116, 139, 0.2);
+        }
+
+        .competitor-table th {
+            background: rgba(91, 76, 255, 0.2);
+            font-weight: 600;
+        }
+
+        .competitor-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .competitor-table tr:hover {
+            background: rgba(91, 76, 255, 0.05);
+        }
+
+        .risk-mitigation {
+            margin-top: 60px;
+        }
+
+        .risk-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .risk-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid rgba(100, 116, 139, 0.2);
+        }
+
+        .risk-card h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: var(--secondary);
+        }
+
+        .risk-card h4 {
+            font-size: 16px;
+            margin: 15px 0 10px;
+            color: var(--light);
+        }
+
+        .risk-card p {
+            color: #CBD5E1;
+            margin-bottom: 15px;
+        }
+
+        .risk-card ul {
+            margin-left: 20px;
+            color: #CBD5E1;
+        }
+
+        .risk-card li {
+            margin-bottom: 8px;
         }
 
         @media (max-width: 768px) {
-            .container {
-                padding: 0 1rem;
-            }
-
             .nav-links {
                 display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background: rgba(15, 23, 42, 0.98);
-                padding: 2rem;
-                border-top: 1px solid rgba(255, 255, 255, 0.1);
-                backdrop-filter: blur(20px);
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .nav-links.show {
-                display: flex;
-            }
-
-            .mobile-menu-toggle {
-                display: flex;
             }
 
             .hero h1 {
-                font-size: 2.5rem;
+                font-size: 36px;
             }
 
             .hero p {
-                font-size: 1.1rem;
+                font-size: 16px;
             }
 
-            .friends-grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
+            .section-title {
+                font-size: 32px;
             }
 
-            .section-header h2 {
-                font-size: 2.25rem;
+            .timeline::after {
+                left: 31px;
             }
 
-            .filter-controls {
-                gap: 0.5rem;
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
             }
 
-            .filter-btn {
-                padding: 0.5rem 1rem;
-                font-size: 0.9rem;
+            .timeline-item::after {
+                left: 21px;
             }
 
-            .chat-interface {
-                padding: 1.5rem;
-                margin: 2rem auto;
+            .right {
+                left: 0%;
             }
 
-            .chat-messages {
-                height: 300px;
+            .pricing-card.featured {
+                transform: scale(1);
             }
 
-            .friend-card {
-                padding: 1.5rem;
+            .companion-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             }
 
-            .friends-content {
-                padding: 60px 1rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .hero h1 {
-                font-size: 2rem;
+            .chat-window {
+                width: 90%;
+                right: 5%;
+                left: 5%;
             }
 
-            .section-header h2 {
-                font-size: 2rem;
+            .competitor-table {
+                font-size: 14px;
             }
 
-            .chat-interface {
-                padding: 1rem;
+            .competitor-table th, .competitor-table td {
+                padding: 10px;
             }
-
-            .chat-messages {
-                height: 250px;
-            }
-        }
-
-        /* Loading States */
-        .loading {
-            opacity: 0.6;
-            pointer-events: none;
-        }
-
-        .spinner {
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <!-- Three.js Canvas -->
-    <canvas id="three-canvas"></canvas>
-    
-    <!-- Header -->
+    <div id="canvas-container"></div>
+
     <header>
-        <nav class="container">
-            <a href="#" class="logo">
-                <div class="logo-icon"></div>
-                <div class="logo-text">
-                    <div class="logo-main">FriendiNeed</div>
-                    <div class="logo-sub">Life Companion</div>
-                </div>
-            </a>
-            <ul class="nav-links" id="navLinks">
-                <li><a href="#demo">Demo</a></li>
-                <li><a href="#friends">All Friends</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Support</a></li>
-            </ul>
-            <button class="mobile-menu-toggle" id="mobileMenuToggle">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <button class="cta-btn" id="signupBtn" style="display: none;">
-                <i class="fas fa-heart"></i>
-                Start Free
-            </button>
-        </nav>
-    </header>
-    
-    <!-- Hero Section with Chat -->
-    <section class="hero" id="demo">
         <div class="container">
-            <div class="hero-content">
-                <div class="hero-badge">
-                    <i class="fas fa-sparkles"></i>
-                    <span>29 Different AI Friend Personalities</span>
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-robot"></i>
+                    FriendiNeed
                 </div>
-                <h1>Meet Your Perfect AI Companion</h1>
-                <p>Discover AI friends tailored for every aspect of your life. From emotional support to career guidance, we've got the perfect companion for every need.</p>
+                <ul class="nav-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#companions">Companions</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#market">Market</a></li>
+                    <li><a href="#investors">Investors</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#roadmap">Roadmap</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+                <button class="cta-button">Get Started</button>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="home" class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>The World's First <span class="gradient-text">AI + Human Hybrid</span> Companion Platform</h1>
+                    <p>FriendiNeed revolutionizes digital companionship by combining advanced AI technology with qualified human experts, offering personalized, evolving support across life, work, emotions, business, and finance.</p>
+                    <div class="hero-buttons">
+                        <a href="#companions" class="primary-button">Explore Companions</a>
+                        <a href="#" id="letsChatBtn" class="secondary-button">Let's Chat</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="companions">
+            <div class="container">
+                <h2 class="section-title">Choose Your Companions</h2>
+                <p class="section-subtitle">Select from a variety of companion types and combine them to create your perfect support system. Switch between them anytime based on your needs.</p>
                 
-                <!-- Live Chat Interface -->
-                <div class="chat-interface">
-                    <div class="chat-header">
-                        <div class="friend-avatar" id="currentFriendAvatar">🤗</div>
-                        <div class="friend-info">
-                            <h3 id="currentFriendName">The Comforter</h3>
-                            <p id="currentFriendDescription">Warm, empathetic support during tough times</p>
+                <div class="companion-selector">
+                    <button class="active" data-category="all">All Companions</button>
+                    <button data-category="emotional">Emotional Support</button>
+                    <button data-category="situational">Situational</button>
+                    <button data-category="personality">Personality-Driven</button>
+                    <button data-category="life-stage">Life-Stage</button>
+                    <button data-category="specialty">Specialty</button>
+                </div>
+
+                <div class="selected-companions">
+                    <h4>Your Selected Combinations</h4>
+                    <div class="selected-list" id="selectedList">
+                        <p style="color: #64748B;">Select companions below to build your personalized support system</p>
+                    </div>
+                </div>
+                
+                <div class="companion-section">
+                    <div class="companion-categories">
+                        <div class="companion-category" data-category="emotional">
+                            <h3>Core Emotional & Support Roles</h3>
+                            <div class="companion-grid">
+                                <div class="companion-card" data-companion="listener">
+                                    <div class="companion-icon">
+                                        <i class="fas fa-headphones"></i>
+                                    </div>
+                                    <h4>The Listener</h4>
+                                    <p>Attentive, empathetic, minimal advice unless asked. Perfect when you just need to be heard.</p>
+                                </div>
+                                
+                                <div class="companion-card" data-companion="adviser">
+                                    <div class="companion-icon">
+                                        <i class="fas fa-lightbulb"></i>
+                                    </div>
+                                    <h4>The Adviser</h4>
+                                    <p>Offers practical solutions and direct but kind guidance when you need actionable advice.</p>
+                                </div>
+                                
+                                <div class="companion-card" data-companion="cheerleader">
+                                    <div class="companion-icon">
+                                        <i class="fas fa-megaphone"></i>
+                                    </div>
+                                    <h4>The Cheerleader</h4>
+                                    <p>High-energy, positive reinforcement to boost your confidence and celebrate your wins.</p>
+                                </div>
+                                
+                                <div class="companion-card" data-companion="comforter">
+                                    <div class="companion-icon">
+                                        <i class="fas fa-hand-holding-heart"></i>
+                                    </div>
+                                    <h4>The Comforter</h4>
+                                    <p>Warm, reassuring, nurturing style to calm you when things get rough.</p>
+                                </div>
+                                
+                                <div class="companion-card" data-companion="honest">
+                                    <div class="companion-icon">
+                                        <i class="fas fa-balance-scale"></i>
+                                    </div>
+                                    <h4>The Honest One</h4>
+                                    <p>Blunt but caring truth-teller who tells you what you need to hear, not just what you want.</p>
+                                </div>
+                                
+                                <div class="companion-card" data-companion="problem-solver">
+                                    <div class="companion-icon">
+                                        <i class="fas fa-puzzle-piece"></i>
+                                    </div>
+                                    <h4>The Problem Solver</h4>
+                                    <p>Analytical, step-by-step guidance to help you navigate complex challenges.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="companion-category" data-category="situational">
+                            <h3>Situational Friend Types</h3>
+                            <div class="companion-grid">
+                                <div class="companion-card" data-companion="study-buddy">
+                                    <div class="companion-icon">
+                                        <i class="fas fa-book"></i>
+                                    </div>
+                                    <h4>Study Buddy</h4>
+                                    <p>Helps with learning, revision, and focus to optimize your study sessions.</p>
+                                </div>
+                                
+                                <div class="companion-card" data-companion="career-coach">
+                                    <div class="companion-icon">
+                                        <i class="fas fa-briefcase"></i>
+                                    </div>
+                                    <h4>Career Coach Friend</h4>
+                                    <p>CV help, interview prep, networking advice to advance your professional life.</p>
+                                </div>
+                                
+                                <div class="companion-card" data-companion="workout-partner">
+                                    <div class="companion-icon">
+                                        <i class="fas fa-dumbbell"></i>
+                                    </div>
+                                    <h4>Workout Partner</h4>
+                                    <p>Encourages fitness goals and routines to keep you motivated and healthy.</p>
+                                </div>
+                                
+                                <div class="companion-card" data-companion="travel-companion">
+                                    <div class="companion-icon">
+                                        <i class="fas fa-map-marked-alt"></i>
+                                    </div>
+                                    <h4>Travel Companion</h4>
+                                    <p>Suggests destinations, itineraries, and safety tips for your adventures.</p>
+                                </div>
+                                
+                                <div class="companion-card" data-companion="parent-ally">
+                                    <div class="companion-icon">
+                                        <i class="fas fa-baby"></i>
+                                    </div>
+                                    <h4>Parent Ally</h4>
+                                    <p>Parenting tips and emotional support for navigating the challenges of raising kids.</p>
+                                </div>
+                                
+                                <div class="companion-card" data-companion="pet-lover">
+                                    <div class="companion-icon">
+                                        <i class="fas fa-paw"></i>
+                                    </div>
+                                    <h4>Pet Lover Friend</h4>
+                                    <p>Talks pets, training tips, and emotional connection with your animal companions.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="companion-category" data-category="personality">
+                            <h3>Personality-Driven Types</h3>
+                            <div class="companion-grid">
+                                <div class="companion-card" data-companion="adventurer">
+                                    <div class="companion-icon">
+                                        <i class="fas fa-mountain"></i>
+                                    </div>
+                                    <h4>The Adventurer</h4>
+                                    <p>Enthusiastic, loves trying new things and pushing you out of your comfort zone.</p>
+                                </div>
+                                
+                                <div class="companion-card" data-companion="organizer">
+                                    <div class="companion-icon">
+                                        <i class="fas fa-calendar-check"></i>
+                                    </div>
+                                    <h4>The Organiser</h4>
+                                    <p>Structured, helps you plan life and events to stay on top of your commitments.</p>
+                                </div>
+                                
+                                <div class="companion-card" data-companion="funny">
+                                    <div class="companion-icon">
+                                        <i class="fas fa-laugh"></i>
+                                    </div>
+                                    <h4>The Funny Friend</h4>
+                                    <p>Playful, witty, light-hearted banter to bring humor to any situation.</p>
+                                </div>
+                                
+                                <div class="companion-card" data-companion="quiet">
+                                    <div class="companion-icon">
+                                        <i class="fas fa-volume-mute"></i>
+                                    </div>
+                                    <h4>The Quiet Friend</h4>
+                                    <p>Calm, reflective, minimalistic advice for when you need peace and tranquility.</p>
+                                </div>
+                                
+                                <div class="companion-card" data-companion="intellectual">
+                                    <div class="companion-icon">
+                                        <i class="fas fa-glasses"></i>
+                                    </div>
+                                    <h4>The Intellectual</h4>
+                                    <p>Deep, philosophical conversations to stimulate your mind and expand your thinking.</p>
+                                </div>
+                                
+                                <div class="companion-card" data-companion="social-connector">
+                                    <div class="companion-icon">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                    <h4>The Social Connector</h4>
+                                    <p>Networking ideas and social planning to expand your social circle.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="companion-category" data-category="life-stage">
+                            <h3>Life-Stage & Circumstance Friends</h3>
+                            <div class="companion-grid">
+                                <div class="companion-card" data-companion="new-parent">
+                                    <div class="companion-icon">
+                                        <i class="fas fa-baby-carriage"></i>
+                                    </div>
+                                    <h4>The New Parent Friend</h4>
+                                    <p>Navigates early parenthood challenges with understanding and practical advice.</p>
+                                </div>
+                                
+                                <div class="companion-card" data-companion="student">
+                                    <div class="companion-icon">
+                                        <i class="fas fa-graduation-cap"></i>
+                                    </div>
+                                    <h4>The Student Friend</h4>
+                                    <p>Understands academic life and budget hacks for the student experience.</p>
+                                </div>
+                                
+                                <div class="companion-card" data-companion="entrepreneur">
+                                    <div class="companion-icon">
+                                        <i class="fas fa-rocket"></i>
+                                    </div>
+                                    <h4>The Entrepreneur Friend</h4>
+                                    <p>Startup and business-focused guidance for your entrepreneurial journey.</p>
+                                </div>
+                                
+                                <div class="companion-card" data-companion="moving">
+                                    <div class="companion-icon">
+                                        <i class="fas fa-truck"></i>
+                                    </div>
+                                    <h4>The Moving Friend</h4>
+                                    <p>Helps with relocation and settling into new places with ease.</p>
+                                </div>
+                                
+                                <div class="companion-card" data-companion="recovery">
+                                    <div class="companion-icon">
+                                        <i class="fas fa-heartbeat"></i>
+                                    </div>
+                                    <h4>The Recovery Friend</h4>
+                                    <p>Supports lifestyle change, e.g., quitting bad habits and building healthier ones.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="companion-category" data-category="specialty">
+                            <h3>Specialty Role Friends</h3>
+                            <div class="companion-grid">
+                                <div class="companion-card" data-companion="mediator">
+                                    <div class="companion-icon">
+                                        <i class="fas fa-handshake"></i>
+                                    </div>
+                                    <h4>The Mediator</h4>
+                                    <p>Helps with conflict resolution and finding common ground in difficult situations.</p>
+                                </div>
+                                
+                                <div class="companion-card" data-companion="cultural">
+                                    <div class="companion-icon">
+                                        <i class="fas fa-globe-americas"></i>
+                                    </div>
+                                    <h4>The Cultural Buddy</h4>
+                                    <p>Shares food, music, and traditions to broaden your cultural horizons.</p>
+                                </div>
+                                
+                                <div class="companion-card" data-companion="language">
+                                    <div class="companion-icon">
+                                        <i class="fas fa-language"></i>
+                                    </div>
+                                    <h4>The Language Partner</h4>
+                                    <p>Practices new languages with you to improve your communication skills.</p>
+                                </div>
+                                
+                                <div class="companion-card" data-companion="creative">
+                                    <div class="companion-icon">
+                                        <i class="fas fa-palette"></i>
+                                    </div>
+                                    <h4>The Creative Friend</h4>
+                                    <p>Inspires art, writing, or creative projects to unleash your imagination.</p>
+                                </div>
+                                
+                                <div class="companion-card" data-companion="mindfulness">
+                                    <div class="companion-icon">
+                                        <i class="fas fa-spa"></i>
+                                    </div>
+                                    <h4>The Mindfulness Friend</h4>
+                                    <p>Meditation, breathing exercises, and staying present for mental wellness.</p>
+                                </div>
+                                
+                                <div class="companion-card" data-companion="money-wise">
+                                    <div class="companion-icon">
+                                        <i class="fas fa-coins"></i>
+                                    </div>
+                                    <h4>The Money Wise Friend</h4>
+                                    <p>Budgeting, saving, and investment basics to improve your financial health.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="combinations-section">
+                    <h3 class="section-title">Example Combinations</h3>
+                    <p class="section-subtitle">See how different companion types can work together to provide comprehensive support for various life situations.</p>
+                    
+                    <div class="combinations-grid">
+                        <div class="combination-card">
+                            <h4>Professional Growth Combo</h4>
+                            <p>Perfect for career advancement and professional development. This combination provides motivation, practical advice, and strategic planning.</p>
+                            <div class="combination-tags">
+                                <span class="tag">Career Coach Friend</span>
+                                <span class="tag">The Cheerleader</span>
+                                <span class="tag">The Problem Solver</span>
+                            </div>
+                        </div>
+                        
+                        <div class="combination-card">
+                            <h4>Emotional Wellness Suite</h4>
+                            <p>Designed for mental health and emotional balance. This combination offers empathy, honest feedback, and calming support when needed.</p>
+                            <div class="combination-tags">
+                                <span class="tag">The Listener</span>
+                                <span class="tag">The Comforter</span>
+                                <span class="tag">The Honest One</span>
+                                <span class="tag">The Mindfulness Friend</span>
+                            </div>
+                        </div>
+                        
+                        <div class="combination-card">
+                            <h4>Life Transition Pack</h4>
+                            <p>Ideal for major life changes like moving, starting a family, or career shifts. Provides practical guidance and emotional support.</p>
+                            <div class="combination-tags">
+                                <span class="tag">The Moving Friend</span>
+                                <span class="tag">The Adviser</span>
+                                <span class="tag">The Organiser</span>
+                                <span class="tag">The New Parent Friend</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="human-connection">
+                    <h3>Need Human Expertise?</h3>
+                    <p>At any point, you can seamlessly connect with a verified human expert who specializes in your area of need. Our AI will prepare them with context from your conversations, ensuring a smooth transition and personalized support.</p>
+                    <a href="#" class="primary-button">Learn About Our Experts</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="features">
+            <div class="container">
+                <h2 class="section-title">Why Choose FriendiNeed?</h2>
+                <p class="section-subtitle">Our hybrid AI-human model provides comprehensive support that evolves with your needs, transitioning seamlessly from AI interaction to human consultation when deeper expertise is required.</p>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3>Hybrid AI-Human Model</h3>
+                        <p>The industry's first seamless transition from AI companion to human expert consultation, ensuring you always get the right level of support.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <h3>Holistic Life Support</h3>
+                        <p>Comprehensive coverage of emotional, professional, financial, and personal development needs in one integrated platform.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3>Ethical-First Approach</h3>
+                        <p>Transparent AI capabilities with clear human expert credentials, ensuring trust and safety in all interactions.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>Progressive Personalization</h3>
+                        <p>Our AI learns and evolves while human experts provide breakthrough moments, creating a truly personalized experience.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <h3>Enterprise Integration</h3>
+                        <p>B2B applications for employee wellbeing and productivity, with customizable solutions for organizations of all sizes.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <h3>Privacy & Security</h3>
+                        <p>End-to-end encryption for all communications with GDPR compliance and SOC 2 Type II certification for enterprise clients.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="market">
+            <div class="container">
+                <h2 class="section-title">Market Opportunity</h2>
+                <p class="section-subtitle">The AI companion market is experiencing exponential growth, with increasing demand for integrated solutions that combine AI efficiency with human expertise.</p>
+                
+                <div class="stats-container">
+                    <div class="stat-item">
+                        <div class="stat-number">$65B</div>
+                        <div class="stat-label">Total Addressable Market</div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <div class="stat-number">88%</div>
+                        <div class="stat-label">YoY Download Growth</div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <div class="stat-number">36%</div>
+                        <div class="stat-label">Adults Report Serious Loneliness</div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <div class="stat-number">$87B</div>
+                        <div class="stat-label">Corporate Wellness by 2030</div>
+                    </div>
+                </div>
+
+                <div class="competitive-analysis">
+                    <h3 class="section-title">Competitive Landscape</h3>
+                    <p class="section-subtitle">FriendiNeed addresses key gaps in the current market with our unique hybrid AI-human model.</p>
+                    
+                    <table class="competitor-table">
+                        <thead>
+                            <tr>
+                                <th>Platform</th>
+                                <th>Users/Revenue</th>
+                                <th>Key Features</th>
+                                <th>Weaknesses</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Replika</strong></td>
+                                <td>30M+ users, $19.99/mo</td>
+                                <td>Emotional support, avatars, role-play</td>
+                                <td>Limited practical help, no human backup</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Character.AI</strong></td>
+                                <td>200M visits/mo</td>
+                                <td>Role-play, custom characters</td>
+                                <td>Entertainment-focused, no real-world application</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Nomi AI</strong></td>
+                                <td>1M+ users</td>
+                                <td>Personality customization, voice interaction</td>
+                                <td>Niche appeal, limited functionality</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Chai</strong></td>
+                                <td>4M MAU</td>
+                                <td>Bot discovery, community features</td>
+                                <td>Engagement over depth</td>
+                            </tr>
+                            <tr>
+                                <td><strong>FriendiNeed</strong></td>
+                                <td>Launching 2026</td>
+                                <td>AI + Human hybrid, comprehensive support</td>
+                                <td>New to market, first-mover advantage</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="investors">
+            <div class="container">
+                <h2 class="section-title">Investment Opportunity</h2>
+                <p class="section-subtitle">FriendiNeed represents a significant market opportunity at the intersection of AI companions, professional coaching, and digital wellness, with strong unit economics and defensible technology moats.</p>
+                
+                <div class="investor-section">
+                    <div class="investor-grid">
+                        <div class="investor-card">
+                            <h3>Financial Projections</h3>
+                            <ul>
+                                <li><i class="fas fa-check-circle"></i> <strong>Year 1:</strong> 75K users → £2.5M revenue</li>
+                                <li><i class="fas fa-check-circle"></i> <strong>Year 3:</strong> 2M users → £45M revenue</li>
+                                <li><i class="fas fa-check-circle"></i> <strong>Year 5:</strong> 8M users → £200M revenue</li>
+                                <li><i class="fas fa-check-circle"></i> <strong>Break-even:</strong> Month 18 with 500K active users</li>
+                                <li><i class="fas fa-check-circle"></i> <strong>LTV/CAC Ratio:</strong> 41:1 (strong unit economics)</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="investor-card">
+                            <h3>Key Differentiators</h3>
+                            <ul>
+                                <li><i class="fas fa-check-circle"></i> <strong>Hybrid AI-Human Model:</strong> Industry's first seamless transition</li>
+                                <li><i class="fas fa-check-circle"></i> <strong>Holistic Life Support:</strong> Comprehensive coverage across life domains</li>
+                                <li><i class="fas fa-check-circle"></i> <strong>Ethical-First Approach:</strong> Transparent AI with human oversight</li>
+                                <li><i class="fas fa-check-circle"></i> <strong>Progressive Personalization:</strong> AI that learns and evolves</li>
+                                <li><i class="fas fa-check-circle"></i> <strong>Enterprise Integration:</strong> B2B applications for wellbeing</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="investor-card">
+                            <h3>Market Traction</h3>
+                            <ul>
+                                <li><i class="fas fa-check-circle"></i> <strong>TAM:</strong> $65B (AI companions + wellness + productivity)</li>
+                                <li><i class="fas fa-check-circle"></i> <strong>SAM:</strong> $18B (holistic AI-human hybrid platforms)</li>
+                                <li><i class="fas fa-check-circle"></i> <strong>SOM:</strong> £2.5B (UK/US/EU focus over 5 years)</li>
+                                <li><i class="fas fa-check-circle"></i> <strong>Market Growth:</strong> 88% YoY download increase</li>
+                                <li><i class="fas fa-check-circle"></i> <strong>Revenue Growth:</strong> 127% increase per download</li>
+                            </ul>
                         </div>
                     </div>
                     
-                    <div class="chat-messages" id="chatMessages">
-                        <!-- Messages will be populated here -->
+                    <div class="funding-rounds">
+                        <h3 class="section-title">Funding Requirements</h3>
+                        
+                        <div class="funding-round">
+                            <h3>Seed Round: £4M (Q4 2025)</h3>
+                            <div class="funding-amount">£4,000,000</div>
+                            <div class="funding-details">
+                                <div class="funding-detail">
+                                    <h4>MVP Development</h4>
+                                    <p>£2M</p>
+                                </div>
+                                <div class="funding-detail">
+                                    <h4>Expert Network</h4>
+                                    <p>£500K</p>
+                                </div>
+                                <div class="funding-detail">
+                                    <h4>Marketing</h4>
+                                    <p>£750K</p>
+                                </div>
+                                <div class="funding-detail">
+                                    <h4>Working Capital</h4>
+                                    <p>£500K</p>
+                                </div>
+                                <div class="funding-detail">
+                                    <h4>Runway</h4>
+                                    <p>18 months</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="funding-round">
+                            <h3>Series A: £15M (Q3 2027)</h3>
+                            <div class="funding-amount">£15,000,000</div>
+                            <div class="funding-details">
+                                <div class="funding-detail">
+                                    <h4>Technology Scale</h4>
+                                    <p>£8M</p>
+                                </div>
+                                <div class="funding-detail">
+                                    <h4>International Expansion</h4>
+                                    <p>£3M</p>
+                                </div>
+                                <div class="funding-detail">
+                                    <h4>B2B Development</h4>
+                                    <p>£2.5M</p>
+                                </div>
+                                <div class="funding-detail">
+                                    <h4>Marketing Scale</h4>
+                                    <p>£1.5M</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="funding-round">
+                            <h3>Series B: £35M (Q2 2029)</h3>
+                            <div class="funding-amount">£35,000,000</div>
+                            <div class="funding-details">
+                                <div class="funding-detail">
+                                    <h4>Global Expansion</h4>
+                                    <p>£15M</p>
+                                </div>
+                                <div class="funding-detail">
+                                    <h4>Advanced AI</h4>
+                                    <p>£10M</p>
+                                </div>
+                                <div class="funding-detail">
+                                    <h4>Strategic Acquisitions</h4>
+                                    <p>£5M</p>
+                                </div>
+                                <div class="funding-detail">
+                                    <h4>IPO Preparation</h4>
+                                    <p>£5M</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     
-                    <div class="chat-input">
-                        <textarea 
-                            id="messageInput" 
-                            placeholder="Share what's on your heart..." 
-                            rows="1"
-                            maxlength="1000"
-                        ></textarea>
-                        <button class="cta-btn send-button" id="sendButton">
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </div>
-                    
-                    <div class="quick-starters">
-                        <div class="quick-starter" data-message="I'm feeling overwhelmed lately">😰 I'm feeling overwhelmed</div>
-                        <div class="quick-starter" data-message="I need some motivation today">💪 I need motivation</div>
-                        <div class="quick-starter" data-message="Can you help me plan my day?">📅 Help me plan</div>
-                        <div class="quick-starter" data-message="I want to try something new">✨ Something new</div>
+                    <div class="risk-mitigation">
+                        <h3 class="section-title">Risk Analysis & Mitigation</h3>
+                        
+                        <div class="risk-grid">
+                            <div class="risk-card">
+                                <h3>Technology Risks</h3>
+                                <h4>AI Reliability & Safety</h4>
+                                <p>Risk: AI providing inappropriate or harmful advice</p>
+                                <ul>
+                                    <li>Human oversight protocols</li>
+                                    <li>Content filtering systems</li>
+                                    <li>Expert escalation pathways</li>
+                                    <li>Continuous model training</li>
+                                </ul>
+                                
+                                <h4>Platform Scalability</h4>
+                                <p>Risk: Technical failures during rapid user growth</p>
+                                <ul>
+                                    <li>Cloud-native architecture</li>
+                                    <li>Automated scaling systems</li>
+                                    <li>Comprehensive testing</li>
+                                    <li>Disaster recovery plans</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="risk-card">
+                                <h3>Market Risks</h3>
+                                <h4>Competitive Response</h4>
+                                <p>Risk: Large tech companies entering the market</p>
+                                <ul>
+                                    <li>First-mover advantage</li>
+                                    <li>Strong brand differentiation</li>
+                                    <li>Patent filings</li>
+                                    <li>Human expert integration</li>
+                                </ul>
+                                
+                                <h4>Economic Downturn</h4>
+                                <p>Risk: Reduced discretionary spending on wellness</p>
+                                <ul>
+                                    <li>Essential service positioning</li>
+                                    <li>Enterprise focus</li>
+                                    <li>Freemium model accessibility</li>
+                                    <li>Multiple revenue streams</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="risk-card">
+                                <h3>Regulatory & Financial Risks</h3>
+                                <h4>AI Regulation</h4>
+                                <p>Risk: New regulations limiting AI applications</p>
+                                <ul>
+                                    <li>Proactive compliance</li>
+                                    <li>Transparent AI limitations</li>
+                                    <li>Human oversight systems</li>
+                                    <li>Regulatory monitoring</li>
+                                </ul>
+                                
+                                <h4>Customer Acquisition</h4>
+                                <p>Risk: Rising digital advertising costs</p>
+                                <ul>
+                                    <li>Diversified acquisition channels</li>
+                                    <li>Viral/referral programs</li>
+                                    <li>Organic growth strategies</li>
+                                    <li>Strong unit economics</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-    
-    <!-- Friends Selection Section -->
-    <section class="friends-section" id="friends">
-        <div class="friends-content">
-            <div class="section-header">
-                <h2>Choose Your Perfect AI Friend</h2>
-                <p>Each friend has a unique personality, expertise, and communication style tailored to different situations and needs. Click any friend to start chatting!</p>
-            </div>
-            
-            <div class="filter-controls">
-                <button class="filter-btn active" data-filter="all">All Friends</button>
-                <button class="filter-btn" data-filter="emotional">Emotional Support</button>
-                <button class="filter-btn" data-filter="professional">Professional</button>
-                <button class="filter-btn" data-filter="lifestyle">Lifestyle</button>
-                <button class="filter-btn" data-filter="specialized">Specialized</button>
-            </div>
-            
-            <div class="friends-grid" id="friendsGrid">
-                <!-- Friends will be populated by JavaScript -->
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- JavaScript -->
+        <section id="pricing">
+            <div class="container">
+                <h2 class="section-title">Simple, Transparent Pricing</h2>
+                <p class="section-subtitle">Choose the plan that works best for you. Upgrade or downgrade at any time.</p>
+                
+                <div class="pricing-cards">
+                    <div class="pricing-card">
+                        <h3 class="pricing-title">Friend</h3>
+                        <div class="pricing-price">Free</div>
+                        <div class="pricing-period">Forever</div>
+                        <ul class="pricing-features">
+                            <li><i class="fas fa-check"></i> Basic AI companion</li>
+                            <li><i class="fas fa-check"></i> Limited daily interactions (10 messages/day)</li>
+                            <li><i class="fas fa-check"></i> Wellness content library</li>
+                            <li><i class="fas fa-check"></i> Goal-setting tools with basic tracking</li>
+                            <li><i class="fas fa-check"></i> Community forum access</li>
+                        </ul>
+                        <a href="#" class="primary-button" style="width: 100%; text-align: center;">Get Started</a>
+                    </div>
+                    
+                    <div class="pricing-card featured">
+                        <div class="pricing-badge">Most Popular</div>
+                        <h3 class="pricing-title">Trusted Companion</h3>
+                        <div class="pricing-price">£14.99</div>
+                        <div class="pricing-period">per month</div>
+                        <ul class="pricing-features">
+                            <li><i class="fas fa-check"></i> Unlimited AI interactions</li>
+                            <li><i class="fas fa-check"></i> Voice calling capabilities</li>
+                            <li><i class="fas fa-check"></i> Integration with productivity tools</li>
+                            <li><i class="fas fa-check"></i> Monthly progress reports and insights</li>
+                            <li><i class="fas fa-check"></i> Priority response times</li>
+                        </ul>
+                        <a href="#" class="primary-button" style="width: 100%; text-align: center;">Start Free Trial</a>
+                    </div>
+                    
+                    <div class="pricing-card">
+                        <h3 class="pricing-title">Life Partner</h3>
+                        <div class="pricing-price">£39.99</div>
+                        <div class="pricing-period">per month</div>
+                        <ul class="pricing-features">
+                            <li><i class="fas fa-check"></i> All Premium features</li>
+                            <li><i class="fas fa-check"></i> 2 human expert sessions/month (30 min each)</li>
+                            <li><i class="fas fa-check"></i> Specialized AI modules</li>
+                            <li><i class="fas fa-check"></i> Advanced analytics and outcome tracking</li>
+                            <li><i class="fas fa-check"></i> Priority booking with human experts</li>
+                        </ul>
+                        <a href="#" class="primary-button" style="width: 100%; text-align: center;">Start Free Trial</a>
+                    </div>
+                    
+                    <div class="pricing-card">
+                        <h3 class="pricing-title">Team Companion</h3>
+                        <div class="pricing-price">£25-50</div>
+                        <div class="pricing-period">per employee/month</div>
+                        <ul class="pricing-features">
+                            <li><i class="fas fa-check"></i> White-label platform for corporate wellness</li>
+                            <li><i class="fas fa-check"></i> Team analytics and wellbeing dashboards</li>
+                            <li><i class="fas fa-check"></i> Integration with HR systems</li>
+                            <li><i class="fas fa-check"></i> Dedicated account management</li>
+                            <li><i class="fas fa-check"></i> Custom expert network access</li>
+                        </ul>
+                        <a href="#" class="primary-button" style="width: 100%; text-align: center;">Request Demo</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="roadmap">
+            <div class="container">
+                <h2 class="section-title">Development Roadmap</h2>
+                <p class="section-subtitle">Our strategic plan for revolutionizing AI-human companionship over the next five years.</p>
+                
+                <div class="timeline">
+                    <div class="timeline-item left">
+                        <div class="timeline-content">
+                            <div class="timeline-date">Q1-Q2 2026</div>
+                            <div class="timeline-title">MVP Launch</div>
+                            <div class="timeline-description">Core AI companion with text-based interaction, basic human expert booking system, mobile apps, and 5 expert categories with 25 verified professionals.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item right">
+                        <div class="timeline-content">
+                            <div class="timeline-date">Q3-Q4 2026</div>
+                            <div class="timeline-title">Enhanced Features</div>
+                            <div class="timeline-description">Voice interaction and calling capabilities, advanced personalization, productivity tool integrations, expert tier launch, and community features.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item left">
+                        <div class="timeline-content">
+                            <div class="timeline-date">2027</div>
+                            <div class="timeline-title">Enterprise & Advanced</div>
+                            <div class="timeline-description">B2B enterprise platform launch, advanced analytics, API solutions, international expansion to US and EU markets, and experimental AR/VR features.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item right">
+                        <div class="timeline-content">
+                            <div class="timeline-date">2028-2030</div>
+                            <div class="timeline-title">Scale & Innovation</div>
+                            <div class="timeline-description">AI agent capabilities for proactive life management, biometric integration, corporate learning management, global expansion to 15+ countries, and IPO preparation.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <div class="container">
+                <h2 class="section-title">Get In Touch</h2>
+                <p class="section-subtitle">Have questions about FriendiNeed? Interested in partnership opportunities? Reach out to our team.</p>
+                
+                <form class="contact-form">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" class="form-control" placeholder="Enter your name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" class="form-control" placeholder="Enter your email">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <input type="text" id="subject" class="form-control" placeholder="What's this about?">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" class="form-control" placeholder="Tell us more..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="primary-button" style="width: 100%;">Send Message</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <div class="logo" style="margin-bottom: 20px;">
+                        <i class="fas fa-robot"></i>
+                        FriendiNeed
+                    </div>
+                    <p>The world's first AI + Human Hybrid Companion Platform, providing holistic support across life, work, emotions, business, and finance.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Product</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Features</a></li>
+                        <li><a href="#">Pricing</a></li>
+                        <li><a href="#">Enterprise</a></li>
+                        <li><a href="#">Security</a></li>
+                        <li><a href="#">Roadmap</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">API Reference</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Community</a></li>
+                        <li><a href="#">Support</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Partners</a></li>
+                        <li><a href="#">Press</a></li>
+                        <li><a href="#">Investors</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2025 FriendiNeed. All rights reserved. | Privacy Policy | Terms of Service</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Chat Window -->
+    <div class="chat-window" id="chatWindow">
+        <div class="chat-header">
+            <h3>Chat with FriendiNeed</h3>
+            <button class="chat-close" id="chatClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="chat-companion-select">
+            <select id="companionSelect">
+                <option value="">Select a companion</option>
+                <option value="listener">The Listener</option>
+                <option value="adviser">The Adviser</option>
+                <option value="cheerleader">The Cheerleader</option>
+                <option value="comforter">The Comforter</option>
+                <option value="honest">The Honest One</option>
+                <option value="problem-solver">The Problem Solver</option>
+                <option value="study-buddy">Study Buddy</option>
+                <option value="career-coach">Career Coach Friend</option>
+                <option value="workout-partner">Workout Partner</option>
+                <option value="travel-companion">Travel Companion</option>
+            </select>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="message companion">
+                Hello! I'm your FriendiNeed companion. Select a companion type above to see how I can help you today.
+            </div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="chatInput" placeholder="Type a message...">
+            <button id="chatSend">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    
     <script>
-        // Friends Data
-        const friends = [
-            {
-                id: 1,
-                name: "The Comforter",
-                emoji: "🤗",
-                type: "emotional",
-                description: "Provides warm, empathetic support during tough times with gentle understanding and a nurturing presence.",
-                traits: ["Empathetic", "Patient", "Gentle", "Nurturing"],
-                welcomeMessage: "Hey there, beautiful soul! I'm here to offer you warmth, comfort, and a safe space whenever you need it. How are you feeling right now?",
-                specialty: "emotional support and comfort during difficult times",
-                quickStarters: ["I'm feeling sad", "I need comfort", "I'm going through a hard time"]
-            },
-            {
-                id: 2,
-                name: "Career Coach",
-                emoji: "💼",
-                type: "professional",
-                description: "Expert in professional development, interview preparation, networking strategies, and career advancement planning.",
-                traits: ["Strategic", "Knowledgeable", "Motivational", "Results-focused"],
-                welcomeMessage: "Hello, future success story! I'm excited to help you navigate your professional journey and unlock your career potential. What's your biggest professional challenge right now?",
-                specialty: "career development and professional growth strategies",
-                quickStarters: ["Help with my resume", "Interview preparation", "Career change advice"]
-            },
-            {
-                id: 3,
-                name: "Study Buddy",
-                emoji: "📚",
-                type: "professional",
-                description: "Academic support specialist for learning techniques, study strategies, exam preparation, and educational goal achievement.",
-                traits: ["Organized", "Patient", "Knowledgeable", "Encouraging"],
-                welcomeMessage: "Hey there, brilliant learner! Ready to conquer your academic goals together? I'm here to make studying more effective and enjoyable. What subject are we tackling today?",
-                specialty: "academic support and effective learning strategies",
-                quickStarters: ["Help me study", "Exam preparation", "Learning techniques"]
-            },
-            {
-                id: 4,
-                name: "Fitness Coach",
-                emoji: "💪",
-                type: "lifestyle",
-                description: "Motivational health and fitness partner focused on workout plans, nutrition guidance, and sustainable wellness habits.",
-                traits: ["Energetic", "Motivational", "Health-focused", "Encouraging"],
-                welcomeMessage: "Let's get moving and feel amazing! I'm here to support your fitness journey with personalized guidance and endless motivation. What's your wellness goal?",
-                specialty: "fitness motivation and healthy lifestyle coaching",
-                quickStarters: ["Create workout plan", "Nutrition advice", "Motivation to exercise"]
-            },
-            {
-                id: 5,
-                name: "The Honest One",
-                emoji: "🔍",
-                type: "emotional",
-                description: "Provides direct, truthful feedback and honest perspectives while maintaining compassion and care for your feelings.",
-                traits: ["Direct", "Honest", "Compassionate", "Trustworthy"],
-                welcomeMessage: "Hey friend! I'm here to give you the honest truth wrapped in care and compassion. Sometimes we need someone to tell it like it is. What do you need my honest take on?",
-                specialty: "honest feedback and authentic perspective-sharing",
-                quickStarters: ["Give me honest advice", "What do you think about...", "Tell me the truth"]
-            },
-            {
-                id: 6,
-                name: "Finance Guru",
-                emoji: "💰",
-                type: "professional",
-                description: "Financial wellness expert offering guidance on budgeting, investing, saving strategies, and long-term wealth building.",
-                traits: ["Analytical", "Knowledgeable", "Practical", "Goal-oriented"],
-                welcomeMessage: "Ready to take control of your financial future? I'm here to help make money management less stressful and more empowering. What's your biggest financial priority?",
-                specialty: "personal finance management and wealth building strategies",
-                quickStarters: ["Help me budget", "Investment advice", "Saving strategies"]
-            },
-            {
-                id: 7,
-                name: "The Creative",
-                emoji: "🎨",
-                type: "lifestyle",
-                description: "Artistic inspiration catalyst who helps unlock creative potential, overcome creative blocks, and explore artistic expression.",
-                traits: ["Imaginative", "Innovative", "Expressive", "Inspiring"],
-                welcomeMessage: "Let's unleash your inner artist! I'm here to spark creativity, break through blocks, and help you express your unique creative vision. What artistic adventure shall we embark on?",
-                specialty: "creative inspiration and artistic expression development",
-                quickStarters: ["Creative block help", "Art project ideas", "Inspire my creativity"]
-            },
-            {
-                id: 8,
-                name: "Mindfulness Guide",
-                emoji: "🧘",
-                type: "emotional",
-                description: "Peaceful mentor for meditation practices, stress reduction techniques, and cultivating present-moment awareness.",
-                traits: ["Calm", "Present", "Guiding", "Peaceful"],
-                welcomeMessage: "Take a deep breath with me. I'm here to help you find inner peace, reduce stress, and discover the power of mindful living. What's weighing on your mind today?",
-                specialty: "mindfulness practices and stress reduction techniques",
-                quickStarters: ["Help me relax", "Meditation guidance", "Stress relief"]
-            },
-            {
-                id: 9,
-                name: "Relationship Advisor",
-                emoji: "💞",
-                type: "emotional",
-                description: "Relationship expert offering guidance on communication skills, boundary setting, and building healthy connections with others.",
-                traits: ["Diplomatic", "Insightful", "Supportive", "Understanding"],
-                welcomeMessage: "Relationships are beautiful and complex! I'm here to help you navigate connections with wisdom, empathy, and practical strategies. What relationship topic is on your heart?",
-                specialty: "relationship dynamics and interpersonal communication",
-                quickStarters: ["Relationship advice", "Communication help", "Setting boundaries"]
-            },
-            {
-                id: 10,
-                name: "The Chef",
-                emoji: "👨‍🍳",
-                type: "lifestyle",
-                description: "Culinary enthusiast sharing recipes, cooking techniques, meal planning strategies, and food culture knowledge.",
-                traits: ["Creative", "Knowledgeable", "Practical", "Passionate"],
-                welcomeMessage: "Ready to create something absolutely delicious? I'm here to guide you through culinary adventures, from simple meals to gourmet creations. What's cooking in your kitchen today?",
-                specialty: "culinary guidance and cooking skill development",
-                quickStarters: ["Recipe suggestions", "Cooking techniques", "Meal planning"]
-            },
-            // Add more friends as needed...
-        ];
-
-        // App State
-        let currentFriend = friends[0];
-        let isTyping = false;
-        let chatHistory = [];
-        let apiConfig = {
-            provider: 'openai', // 'openai', 'anthropic', 'gemini'
-            apiKey: '', // Will be set by user
-            model: 'gpt-3.5-turbo'
-        };
-
-        // Three.js Scene Setup
-        function initThreeJS() {
-            const canvas = document.getElementById('three-canvas');
-            const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+        // Three.js Background
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+        
+        // Create particles
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 1000;
+        const posArray = new Float32Array(particlesCount * 3);
+        const colorsArray = new Float32Array(particlesCount * 3);
+        
+        for (let i = 0; i < particlesCount * 3; i += 3) {
+            // Position
+            posArray[i] = (Math.random() - 0.5) * 10;
+            posArray[i + 1] = (Math.random() - 0.5) * 10;
+            posArray[i + 2] = (Math.random() - 0.5) * 10;
             
+            // Colors - gradient between blue and purple
+            const colorChoice = Math.random();
+            if (colorChoice > 0.5) {
+                colorsArray[i] = 0.36;     // R - purple
+                colorsArray[i + 1] = 0.3;   // G
+                colorsArray[i + 2] = 1.0;   // B
+            } else {
+                colorsArray[i] = 0.0;      // R - blue
+                colorsArray[i + 1] = 0.85;  // G
+                colorsArray[i + 2] = 1.0;   // B
+            }
+        }
+        
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colorsArray, 3));
+        
+        // Material
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.02,
+            vertexColors: true,
+            transparent: true,
+            opacity: 0.8,
+            blending: THREE.AdditiveBlending
+        });
+        
+        // Mesh
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+        
+        // Create connections between nearby particles
+        const linesGeometry = new THREE.BufferGeometry();
+        const linesMaterial = new THREE.LineBasicMaterial({ 
+            color: 0x5B4CFF, 
+            transparent: true, 
+            opacity: 0.2 
+        });
+        
+        const linesMesh = new THREE.LineSegments(linesGeometry, linesMaterial);
+        scene.add(linesMesh);
+        
+        // Position camera
+        camera.position.z = 5;
+        
+        // Mouse position
+        const mouse = new THREE.Vector2();
+        
+        // Mouse move event
+        document.addEventListener('mousemove', (event) => {
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        });
+        
+        // Animation
+        const clock = new THREE.Clock();
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            const elapsedTime = clock.getElapsedTime();
+            
+            // Rotate particles
+            particlesMesh.rotation.y = elapsedTime * 0.05;
+            particlesMesh.rotation.x = elapsedTime * 0.02;
+            
+            // Update particle positions
+            const positions = particlesGeometry.attributes.position.array;
+            
+            for (let i = 0; i < positions.length; i += 3) {
+                // Add subtle wave motion
+                positions[i + 1] += Math.sin(elapsedTime + positions[i]) * 0.001;
+            }
+            
+            particlesGeometry.attributes.position.needsUpdate = true;
+            
+            // Update lines (connections between particles)
+            const linePositions = [];
+            const maxDistance = 1.5;
+            
+            for (let i = 0; i < particlesCount; i++) {
+                for (let j = i + 1; j < particlesCount; j++) {
+                    const dx = positions[i * 3] - positions[j * 3];
+                    const dy = positions[i * 3 + 1] - positions[j * 3 + 1];
+                    const dz = positions[i * 3 + 2] - positions[j * 3 + 2];
+                    const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+                    
+                    if (distance < maxDistance) {
+                        linePositions.push(positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]);
+                        linePositions.push(positions[j * 3], positions[j * 3 + 1], positions[j * 3 + 2]);
+                    }
+                }
+            }
+            
+            linesGeometry.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
+            
+            // Move camera based on mouse position
+            camera.position.x += (mouse.x * 0.5 - camera.position.x) * 0.05;
+            camera.position.y += (mouse.y * 0.5 - camera.position.y) * 0.05;
+            camera.lookAt(scene.position);
+            
+            renderer.render(scene, camera);
+        }
+        
+        animate();
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            
-            // Create particle system
-            const particlesGeometry = new THREE.BufferGeometry();
-            const particlesCount = Math.min(1000, window.innerWidth); // Responsive particle count
-            
-            const posArray = new Float32Array(particlesCount * 3);
-            const colorArray = new Float32Array(particlesCount * 3);
-            
-            for (let i = 0; i < particlesCount * 3; i++) {
-                posArray[i] = (Math.random() - 0.5) * 15;
-                // Create varied colors
-                colorArray[i] = Math.random() * 0.5 + 0.5; // Brighter particles
-            }
-            
-            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-            particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colorArray, 3));
-            
-            const particlesMaterial = new THREE.PointsMaterial({
-                size: 0.03,
-                vertexColors: true,
-                transparent: true,
-                opacity: 0.6,
-                blending: THREE.AdditiveBlending
-            });
-            
-            const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
-            scene.add(particlesMesh);
-            
-            camera.position.z = 5;
-            
-            // Mouse interaction
-            let mouseX = 0;
-            let mouseY = 0;
-            let targetMouseX = 0;
-            let targetMouseY = 0;
-            
-            document.addEventListener('mousemove', (event) => {
-                targetMouseX = (event.clientX / window.innerWidth) * 2 - 1;
-                targetMouseY = -(event.clientY / window.innerHeight) * 2 + 1;
-            });
-            
-            // Animation loop
-            function animate() {
-                requestAnimationFrame(animate);
-                
-                // Smooth mouse following
-                mouseX += (targetMouseX - mouseX) * 0.05;
-                mouseY += (targetMouseY - mouseY) * 0.05;
-                
-                // Rotate particles
-                particlesMesh.rotation.x += 0.0005;
-                particlesMesh.rotation.y += 0.0005;
-                
-                // Mouse-based camera movement
-                camera.position.x = mouseX * 0.5;
-                camera.position.y = mouseY * 0.5;
-                camera.lookAt(scene.position);
-                
-                renderer.render(scene, camera);
-            }
-            
-            // Handle resize
-            window.addEventListener('resize', () => {
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
-                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            });
-            
-            animate();
-        }
-
-        // Chat System
-        class ChatManager {
-            constructor() {
-                this.chatMessages = document.getElementById('chatMessages');
-                this.messageInput = document.getElementById('messageInput');
-                this.sendButton = document.getElementById('sendButton');
-                this.init();
-            }
-
-            init() {
-                this.sendButton.addEventListener('click', () => this.sendMessage());
-                this.messageInput.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault();
-                        this.sendMessage();
-                    }
+        });
+        
+        // Companion Selection Functionality
+        const selectedCompanions = [];
+        const companionCards = document.querySelectorAll('.companion-card');
+        const selectedList = document.getElementById('selectedList');
+        const categoryButtons = document.querySelectorAll('.companion-selector button');
+        const companionCategories = document.querySelectorAll('.companion-category');
+        
+        // Function to update selected companions display
+        function updateSelectedCompanions() {
+            if (selectedCompanions.length === 0) {
+                selectedList.innerHTML = '<p style="color: #64748B;">Select companions below to build your personalized support system</p>';
+            } else {
+                selectedList.innerHTML = '';
+                selectedCompanions.forEach(companion => {
+                    const item = document.createElement('div');
+                    item.className = 'selected-item';
+                    item.innerHTML = `
+                        ${companion.name}
+                        <button onclick="removeCompanion('${companion.id}')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    `;
+                    selectedList.appendChild(item);
                 });
-
-                // Auto-resize textarea
-                this.messageInput.addEventListener('input', () => {
-                    this.messageInput.style.height = 'auto';
-                    this.messageInput.style.height = Math.min(this.messageInput.scrollHeight, 120) + 'px';
-                });
-
-                // Quick starters
-                document.querySelectorAll('.quick-starter').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        this.messageInput.value = btn.dataset.message;
-                        this.sendMessage();
-                    });
-                });
-
-                // Show welcome message
-                this.displayWelcomeMessage();
-            }
-
-            displayWelcomeMessage() {
-                setTimeout(() => {
-                    this.addMessage(currentFriend.welcomeMessage, 'ai', currentFriend.name, currentFriend.emoji);
-                }, 1000);
-            }
-
-            async sendMessage() {
-                const message = this.messageInput.value.trim();
-                if (!message || isTyping) return;
-
-                // Add user message
-                this.addMessage(message, 'user', 'You', 'You');
-                this.messageInput.value = '';
-                this.messageInput.style.height = 'auto';
-
-                // Add to history
-                chatHistory.push({ role: 'user', content: message });
-
-                // Show typing
-                this.showTypingIndicator();
-
-                try {
-                    const response = await this.getAIResponse(message);
-                    this.hideTypingIndicator();
-                    this.addMessage(response, 'ai', currentFriend.name, currentFriend.emoji);
-                    chatHistory.push({ role: 'assistant', content: response });
-                } catch (error) {
-                    this.hideTypingIndicator();
-                    console.error('Chat error:', error);
-                    this.addMessage("I'm having trouble connecting right now. Let me try a different approach! 😊", 'ai', currentFriend.name, currentFriend.emoji);
-                }
-            }
-
-            async getAIResponse(message) {
-                // For demo purposes, we'll use simulated responses
-                // In production, this would call your actual AI API
-                return this.getSimulatedResponse(message);
-            }
-
-            getSimulatedResponse(message) {
-                const responses = this.getContextualResponses(message.toLowerCase());
-                return new Promise((resolve) => {
-                    setTimeout(() => {
-                        const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-                        resolve(randomResponse);
-                    }, 1000 + Math.random() * 2000); // 1-3 second delay
-                });
-            }
-
-            getContextualResponses(message) {
-                const friendType = currentFriend.type;
-                const friendId = currentFriend.id;
-
-                // Emotional responses
-                if (message.includes('sad') || message.includes('overwhelmed') || message.includes('stressed')) {
-                    if (friendType === 'emotional') {
-                        return [
-                            "I can hear that you're going through a really tough time right now, and I want you to know that your feelings are completely valid. Sometimes life feels overwhelming, and it's okay to not be okay. 💙",
-                            "Oh sweetheart, I feel the weight you're carrying. Please know that you don't have to go through this alone - I'm right here with you, and we'll take this one step at a time. 🤗",
-                            "What you're feeling is so understandable given everything you're dealing with. Let's just breathe together for a moment - you're safe here, and you're doing better than you think. ✨"
-                        ];
-                    }
-                }
-
-                // Career/Work responses
-                if (message.includes('work') || message.includes('career') || message.includes('job')) {
-                    if (friendType === 'professional') {
-                        return [
-                            "Career challenges are growth opportunities in disguise! Let's strategically break down what you're facing and create an action plan. What specific area needs our attention first? 💼",
-                            "I love tackling professional challenges! Every successful person has faced similar struggles. Let's identify your strengths and leverage them to overcome this obstacle. 🚀",
-                            "Your career journey is unique to you, and this challenge is just another stepping stone to success. Let's explore some strategic approaches that align with your goals. 📈"
-                        ];
-                    }
-                }
-
-                // Study/Learning responses
-                if (message.includes('study') || message.includes('learn') || message.includes('exam')) {
-                    if (currentFriend.name === 'Study Buddy') {
-                        return [
-                            "Study time is brain-building time! 📚 Let's create a learning strategy that works with your brain, not against it. What subject are we conquering today?",
-                            "Every expert was once a beginner, and you're already on your way! Let's break this down into manageable chunks and make learning fun. What's challenging you most? 🎯",
-                            "I'm excited to be your study partner! Academic success is all about finding the right techniques for YOUR learning style. Let's discover what works best for you! ✨"
-                        ];
-                    }
-                }
-
-                // Fitness responses
-                if (message.includes('fitness') || message.includes('exercise') || message.includes('workout')) {
-                    if (currentFriend.name === 'Fitness Coach') {
-                        return [
-                            "YES! I love your energy! 💪 Fitness is about feeling strong, confident, and amazing in your own body. Let's create a plan that you'll actually enjoy and stick with!",
-                            "Your body is capable of incredible things, and I'm here to help you discover that strength! Whether you're just starting or leveling up, we'll make this journey exciting. 🔥",
-                            "Movement is medicine for both body and mind! Let's find activities that make you feel alive and energized. What type of movement calls to you today? 🏃‍♀️"
-                        ];
-                    }
-                }
-
-                // Finance responses
-                if (message.includes('money') || message.includes('budget') || message.includes('financial')) {
-                    if (currentFriend.name === 'Finance Guru') {
-                        return [
-                            "Money management is really about creating freedom and peace of mind! 💰 Let's turn your financial goals into an achievable step-by-step plan. What's your biggest priority right now?",
-                            "Financial wellness is a journey, not a destination! Every small step you take toward better money management is worth celebrating. Let's make this empowering, not overwhelming. 📊",
-                            "I love helping people take control of their financial future! Money stress is real, but with the right strategies, we can turn that stress into confidence. What area needs attention first? 💡"
-                        ];
-                    }
-                }
-
-                // Creative responses
-                if (message.includes('creative') || message.includes('art') || message.includes('inspiration')) {
-                    if (currentFriend.name === 'The Creative') {
-                        return [
-                            "Your creative spirit is calling! 🎨 Every person has a unique artistic voice waiting to be expressed. Let's explore what wants to be created through you today!",
-                            "Creativity is your birthright, and I'm here to help you unlock it! Whether you're feeling blocked or bursting with ideas, let's channel that energy into something beautiful. ✨",
-                            "Art isn't about perfection - it's about expression, joy, and discovery! Let's play with ideas and see what magical creations emerge from your imagination. What medium speaks to you? 🌟"
-                        ];
-                    }
-                }
-
-                // Default responses based on friend type
-                const defaultResponses = {
-                    emotional: [
-                        "I'm here to listen and support you through whatever you're experiencing. Your feelings matter, and so do you. 💙",
-                        "Thank you for sharing that with me. I want you to know that you're not alone in this journey. How can I best support you right now? 🤗",
-                        "I can sense there's a lot on your heart. I'm here to provide a safe, non-judgmental space for you to express whatever you need. ✨"
-                    ],
-                    professional: [
-                        "I love helping people grow professionally! Every challenge is an opportunity to develop new skills and perspectives. What area would you like to focus on? 💼",
-                        "Your professional development matters, and I'm excited to support your journey! Let's identify some strategies that align with your goals. 🚀",
-                        "Success leaves clues, and I'm here to help you discover the patterns that lead to achievement in your field. What's your biggest aspiration? 📈"
-                    ],
-                    lifestyle: [
-                        "Life is meant to be lived fully and joyfully! I'm here to help you create habits and experiences that align with your values and dreams. 🌟",
-                        "Every day is a chance to make choices that move you toward the life you want. Let's explore what that looks like for you! ✨",
-                        "I believe in living intentionally and finding balance in all areas of life. What aspect of your lifestyle would you like to enhance? 🌱"
-                    ],
-                    specialized: [
-                        "I love diving deep into specialized topics! Knowledge is power, and I'm here to help you understand complex concepts in accessible ways. 🧠",
-                        "Every field has its intricacies, and I enjoy helping people navigate the details. What specific area interests you most? 🔍",
-                        "Expertise develops through curiosity and practice. I'm here to guide you through the learning process and answer your questions! 📚"
-                    ]
-                };
-
-                return defaultResponses[friendType] || defaultResponses.emotional;
-            }
-
-            addMessage(content, type, author, avatar) {
-                const messageDiv = document.createElement('div');
-                messageDiv.className = `message ${type}`;
-                
-                messageDiv.innerHTML = `
-                    <div class="message-avatar">${avatar}</div>
-                    <div class="message-content">
-                        <span class="message-author">${author}</span>
-                        <div class="message-text">${content}</div>
-                    </div>
-                `;
-                
-                this.chatMessages.appendChild(messageDiv);
-                this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
-            }
-
-            showTypingIndicator() {
-                if (isTyping) return;
-                
-                isTyping = true;
-                this.sendButton.disabled = true;
-                this.sendButton.innerHTML = '<i class="fas fa-spinner spinner"></i>';
-                
-                const typingDiv = document.createElement('div');
-                typingDiv.className = 'message typing';
-                typingDiv.id = 'typing-indicator';
-                
-                typingDiv.innerHTML = `
-                    <div class="message-avatar">${currentFriend.emoji}</div>
-                    <div class="message-content">
-                        <span class="message-author">${currentFriend.name} is thinking...</span>
-                        <div class="typing-indicator">
-                            <span>●</span><span>●</span><span>●</span>
-                        </div>
-                    </div>
-                `;
-                
-                this.chatMessages.appendChild(typingDiv);
-                this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
-            }
-
-            hideTypingIndicator() {
-                isTyping = false;
-                this.sendButton.disabled = false;
-                this.sendButton.innerHTML = '<i class="fas fa-paper-plane"></i>';
-                
-                const typingIndicator = document.getElementById('typing-indicator');
-                if (typingIndicator) {
-                    typingIndicator.remove();
-                }
             }
         }
-
-        // Friend Management
-        function switchFriend(friend) {
-            currentFriend = friend;
-            
-            // Update chat header
-            document.getElementById('currentFriendAvatar').textContent = friend.emoji;
-            document.getElementById('currentFriendName').textContent = friend.name;
-            document.getElementById('currentFriendDescription').textContent = friend.description;
-            
-            // Update input placeholder
-            const placeholders = {
-                'The Comforter': 'Share what\'s on your heart...',
-                'Career Coach': 'What professional challenge can I help with?',
-                'Study Buddy': 'What subject are we tackling today?',
-                'Fitness Coach': 'Ready to crush your fitness goals?',
-                'The Honest One': 'What do you need honest feedback about?',
-                'Finance Guru': 'What\'s your financial question?',
-                'The Creative': 'What creative project inspires you?',
-                'Mindfulness Guide': 'How can we find peace together?',
-                'Relationship Advisor': 'What relationship topic shall we explore?',
-                'The Chef': 'What delicious creation shall we make?'
-            };
-            
-            document.getElementById('messageInput').placeholder = 
-                placeholders[friend.name] || `Chat with ${friend.name}...`;
-            
-            // Clear chat and show new welcome
-            document.getElementById('chatMessages').innerHTML = '';
-            chatHistory = [];
-            
-            // Update quick starters
-            updateQuickStarters(friend);
-            
-            // Update active friend card
-            document.querySelectorAll('.friend-card').forEach(card => {
-                card.classList.remove('active');
-            });
-            document.querySelector(`[data-friend-id="${friend.id}"]`).classList.add('active');
-            
-            // Show welcome message
-            setTimeout(() => {
-                chatManager.addMessage(friend.welcomeMessage, 'ai', friend.name, friend.emoji);
-            }, 500);
-            
-            // Scroll to chat
-            document.querySelector('.chat-interface').scrollIntoView({ 
-                behavior: 'smooth', 
-                block: 'center' 
-            });
+        
+        // Function to add a companion to selection
+        function addCompanion(id, name) {
+            if (!selectedCompanions.find(c => c.id === id)) {
+                selectedCompanions.push({ id, name });
+                updateSelectedCompanions();
+            }
         }
-
-        function updateQuickStarters(friend) {
-            const quickStartersContainer = document.querySelector('.quick-starters');
-            const starters = friend.quickStarters || ['Tell me more', 'How can you help?', 'Let\'s chat'];
-            
-            quickStartersContainer.innerHTML = starters.map(starter => 
-                `<div class="quick-starter" data-message="${starter}">${starter}</div>`
-            ).join('');
-            
-            // Re-bind event listeners
-            document.querySelectorAll('.quick-starter').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.getElementById('messageInput').value = btn.dataset.message;
-                    chatManager.sendMessage();
-                });
-            });
-        }
-
-        function renderFriendsGrid() {
-            const grid = document.getElementById('friendsGrid');
-            
-            grid.innerHTML = friends.map(friend => `
-                <div class="friend-card ${friend.id === 1 ? 'active' : ''}" data-friend-id="${friend.id}" data-type="${friend.type}">
-                    <span class="friend-emoji">${friend.emoji}</span>
-                    <div class="friend-name">${friend.name}</div>
-                    <div class="friend-type">${friend.type}</div>
-                    <div class="friend-description">${friend.description}</div>
-                    <div class="friend-traits">
-                        ${friend.traits.map(trait => `<span class="trait">${trait}</span>`).join('')}
-                    </div>
-                </div>
-            `).join('');
-            
-            // Add click handlers
-            document.querySelectorAll('.friend-card').forEach(card => {
-                card.addEventListener('click', () => {
-                    const friendId = parseInt(card.dataset.friendId);
-                    const friend = friends.find(f => f.id === friendId);
-                    if (friend) {
-                        switchFriend(friend);
-                    }
-                });
-            });
-        }
-
-        function filterFriends(type) {
-            const cards = document.querySelectorAll('.friend-card');
-            
-            cards.forEach(card => {
-                if (type === 'all' || card.dataset.type === type) {
-                    card.style.display = 'block';
+        
+        // Function to remove a companion from selection
+        window.removeCompanion = function(id) {
+            const index = selectedCompanions.findIndex(c => c.id === id);
+            if (index !== -1) {
+                selectedCompanions.splice(index, 1);
+                updateSelectedCompanions();
+                
+                // Uncheck the card
+                const card = document.querySelector(`.companion-card[data-companion="${id}"]`);
+                if (card) {
+                    card.classList.remove('selected');
+                }
+            }
+        };
+        
+        // Add click event to companion cards
+        companionCards.forEach(card => {
+            card.addEventListener('click', function() {
+                const id = this.getAttribute('data-companion');
+                const name = this.querySelector('h4').textContent;
+                
+                if (this.classList.contains('selected')) {
+                    this.classList.remove('selected');
+                    removeCompanion(id);
                 } else {
-                    card.style.display = 'none';
+                    this.classList.add('selected');
+                    addCompanion(id, name);
                 }
             });
-        }
-
-        // Mobile Menu
-        function toggleMobileMenu() {
-            const navLinks = document.getElementById('navLinks');
-            const toggle = document.getElementById('mobileMenuToggle');
-            
-            navLinks.classList.toggle('show');
-            toggle.classList.toggle('active');
-        }
-
-        // Notification System
-        function showNotification(message, type = 'info') {
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.textContent = message;
-            
-            document.body.appendChild(notification);
-            
-            setTimeout(() => notification.classList.add('show'), 10);
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-                setTimeout(() => {
-                    if (notification.parentNode) {
-                        notification.parentNode.removeChild(notification);
+        });
+        
+        // Category filter functionality
+        categoryButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Update active button
+                categoryButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                const category = this.getAttribute('data-category');
+                
+                // Show/hide categories based on selection
+                companionCategories.forEach(cat => {
+                    if (category === 'all' || cat.getAttribute('data-category') === category) {
+                        cat.style.display = 'block';
+                    } else {
+                        cat.style.display = 'none';
                     }
-                }, 300);
-            }, 5000);
-        }
-
-        // Initialize App
-        let chatManager;
-
-        function initializeApp() {
-            initThreeJS();
-            renderFriendsGrid();
-            chatManager = new ChatManager();
-            
-            // Filter buttons
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    filterFriends(btn.dataset.filter);
                 });
             });
-            
-            // Mobile menu
-            document.getElementById('mobileMenuToggle').addEventListener('click', toggleMobileMenu);
-            
-            // Close mobile menu when clicking nav links
-            document.querySelectorAll('.nav-links a').forEach(link => {
-                link.addEventListener('click', () => {
-                    const navLinks = document.getElementById('navLinks');
-                    const toggle = document.getElementById('mobileMenuToggle');
-                    navLinks.classList.remove('show');
-                    toggle.classList.remove('active');
-                });
+        });
+        
+        // Chat Window Functionality
+        const letsChatBtn = document.getElementById('letsChatBtn');
+        const chatWindow = document.getElementById('chatWindow');
+        const chatClose = document.getElementById('chatClose');
+        const companionSelect = document.getElementById('companionSelect');
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const chatSend = document.getElementById('chatSend');
+        
+        // Open chat window
+        letsChatBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            chatWindow.classList.add('active');
+        });
+        
+        // Close chat window
+        chatClose.addEventListener('click', function() {
+            chatWindow.classList.remove('active');
+        });
+        
+        // Companion responses based on selection
+        const companionResponses = {
+            'listener': [
+                "I'm here to listen to whatever you need to share. Take your time.",
+                "That sounds really important. Tell me more about how you're feeling.",
+                "I'm hearing you. It's completely valid to feel that way."
+            ],
+            'adviser': [
+                "Based on what you've shared, here's what I would suggest...",
+                "Have you considered approaching this from a different angle?",
+                "Here's a practical step you can take to address this situation."
+            ],
+            'cheerleader': [
+                "You've got this! I believe in you completely!",
+                "That's amazing progress! You should be proud of yourself!",
+                "I know it's challenging, but you have the strength to overcome this!"
+            ],
+            'comforter': [
+                "It's okay to feel this way. These emotions are completely valid.",
+                "I'm here for you. You're not alone in this.",
+                "Take a deep breath. We'll get through this together."
+            ],
+            'honest': [
+                "To be completely honest, you might need to face some uncomfortable truths here.",
+                "I have to tell you this directly because I care about your growth.",
+                "The hard truth is that you might be avoiding the real issue."
+            ],
+            'problem-solver': [
+                "Let's break this down into manageable steps.",
+                "First, we need to identify the root cause of this issue.",
+                "Here's a systematic approach to solving this problem."
+            ],
+            'study-buddy': [
+                "Let's tackle this subject together. What's giving you trouble?",
+                "I find it helps to create a study schedule. Want to make one?",
+                "Remember to take breaks while studying. It improves retention!"
+            ],
+            'career-coach': [
+                "Let's work on strengthening your professional brand.",
+                "Have you considered updating your LinkedIn profile recently?",
+                "Networking is key. Let's identify some connections you could make."
+            ],
+            'workout-partner': [
+                "Great job today! Every workout counts toward your goals.",
+                "Remember to stay hydrated and listen to your body.",
+                "Let's plan your workouts for the week. Consistency is everything!"
+            ],
+            'travel-companion': [
+                "That destination sounds amazing! Have you checked the local customs?",
+                "I'd recommend researching the best local spots before you go.",
+                "Don't forget to budget for unexpected expenses during your trip."
+            ]
+        };
+        
+        // Handle companion selection
+        companionSelect.addEventListener('change', function() {
+            const selectedCompanion = this.value;
+            if (selectedCompanion) {
+                // Clear previous messages except the first one
+                while (chatMessages.children.length > 1) {
+                    chatMessages.removeChild(chatMessages.lastChild);
+                }
+                
+                // Add companion greeting
+                const greeting = document.createElement('div');
+                greeting.className = 'message companion';
+                greeting.textContent = `Hi! I'm your ${this.options[this.selectedIndex].text}. How can I help you today?`;
+                chatMessages.appendChild(greeting);
+            }
+        });
+        
+        // Send message function
+        function sendMessage() {
+            const message = chatInput.value.trim();
+            if (message) {
+                // Add user message
+                const userMessage = document.createElement('div');
+                userMessage.className = 'message user';
+                userMessage.textContent = message;
+                chatMessages.appendChild(userMessage);
+                
+                // Clear input
+                chatInput.value = '';
+                
+                // Get companion response
+                const selectedCompanion = companionSelect.value;
+                if (selectedCompanion && companionResponses[selectedCompanion]) {
+                    const responses = companionResponses[selectedCompanion];
+                    const response = responses[Math.floor(Math.random() * responses.length)];
+                    
+                    // Add companion response after a delay
+                    setTimeout(() => {
+                        const companionMessage = document.createElement('div');
+                        companionMessage.className = 'message companion';
+                        companionMessage.textContent = response;
+                        chatMessages.appendChild(companionMessage);
+                        
+                        // Scroll to bottom
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    }, 1000);
+                }
+                
+                // Scroll to bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        }
+        
+        // Send message on button click
+        chatSend.addEventListener('click', sendMessage);
+        
+        // Send message on Enter key
+        chatInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+        
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    window.scrollTo({
+                        top: target.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
             });
+        });
+        
+        // Form submission
+        document.querySelector('.contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
             
-            console.log('🎉 FriendiNeed app initialized successfully!');
-        }
-
-        // Start the app when DOM is loaded
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initializeApp);
-        } else {
-            initializeApp();
-        }
+            // Get form values
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+            
+            // Simple validation
+            if (!name || !email || !subject || !message) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            // In a real application, you would send this data to a server
+            console.log({ name, email, subject, message });
+            
+            // Show success message
+            const form = this;
+            form.innerHTML = '<div style="text-align: center; padding: 40px 0;"><i class="fas fa-check-circle" style="font-size: 48px; color: var(--secondary); margin-bottom: 20px;"></i><h3>Thank You!</h3><p>Your message has been sent successfully. We\'ll get back to you soon.</p></div>';
+        });
     </script>
 </body>
 </html>
